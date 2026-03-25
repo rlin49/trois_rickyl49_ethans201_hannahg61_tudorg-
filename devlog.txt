@@ -1,1 +1,4 @@
 Each entry should begin with the following format: firstL -- TIMESTAMP\n ( e.g.: topherM -- 1999-12-31 23:59 )
+
+rickyL -- 2026-03-24 10:30
+- Made this repo and added devlog and header for readme.md
