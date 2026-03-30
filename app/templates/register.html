@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Game sales</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+
+    <body class="bg-green-50 h-screen">
+        <header class="fixed top-0 left-0 w-full bg-green-300 text-white shadow-lg z-50">
+           <nav class="px-4 py-3 flex items-center justify-between">
+                <h1 class="text-xl font-bold drop-shadow-lg">trois project</h1>
+                <div class="space-x-4">
+                    <a href="/" class="text-lg font-bold text-center px-1.5 py-1.5 lg:border rounded border-white text-white drop-shadow-lg hover:border-transparent hover:bg-white hover:text-green-300 hover:underline">Login</a>
+                </div>
+            </nav>
+        </header>
+
+        <div class="relative flex flex-col items-center justify-center pt-24 px-4">
+            <div class="bg-green-300 shadow-xl rounded-lg p-4 border-4 rounded border-white w-full max-w-6xl drop-shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 text-white drop-shadow-lg text-center">Register</h3>
+                    <form method="POST" class="flex flex-col space-y-4">
+                        <input type="text" name="user_id" placeholder="Username" required class="border-2 border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <p class="text-xs text-white">Usernames cannot be empty or have any special characters besides an underscore.</p>
+                        <input type="password" name="password" placeholder="Password" required class="border-2 border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <p class="text-xs text-white">Passwords cannot be empty.</p>
+                        <input type="submit" class="bg-green-500 text-white font-bold py-2 rounded hover:bg-green-600" value="Let's go!">
+                    </form>
+                    <p class="mt-4 text-s text-white text-center">Have an account already? What are you waiting for? <a href="/" class="underline">Go log in!</a></p>
+            </div>
+
+            {% if error %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded absolute top-full mt-4 right-5" role="alert">
+                    <strong class="font-bold">{{ error_msg }}</strong>
+                </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
