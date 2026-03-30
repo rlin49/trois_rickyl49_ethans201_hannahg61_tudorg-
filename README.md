@@ -7,3 +7,5 @@ Ethan: User handling (creating profiles, making reviews, etc)
 Hannah: Frontend, graphs
 
 Tudor: Database sanitation, APIs, backend
+
+# description
