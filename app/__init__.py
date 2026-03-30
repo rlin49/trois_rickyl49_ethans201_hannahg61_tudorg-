@@ -13,9 +13,6 @@ DBC.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, revi
 
 DBC.execute("CREATE TABLE IF NOT EXISTS reviews(game_id INT, body TEXT, user_id INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
-
-
-
 @app.route("/")
 def main():
     return "P04 Temp Site"
