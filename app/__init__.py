@@ -7,7 +7,7 @@ DB_NAME = "Data/database.db"
 DB = sqlite3.connect(DB_NAME)
 DBC = DB.cursor()
 
-DBC.execute("CREATE TABLE IF NOT EXISTS games(name TEXT, reviews TEXT, description TEXT, user_rating INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
+DBC.execute("CREATE TABLE IF NOT EXISTS games(name TEXT, reviews TEXT, user_rating INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
 DBC.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, reviews TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
