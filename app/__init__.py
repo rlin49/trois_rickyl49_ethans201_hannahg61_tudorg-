@@ -19,9 +19,7 @@ app.secret_key = "secret_key_testing"
 
 @app.route("/")
 def main():
-    if 'username' not in session:
-        return render_template("login.html")
-    return redirect(url_for('homepage'))
+    return redirect(url_for("login"))
 
 
 
@@ -37,14 +35,14 @@ def homepage():
         return redirect(url_for('login'))
     else:
         return render_template('homepage.html',error="")
-        
+
+
 @app.route("/game")
 def game():
     if 'username' not in session:
         return redirect(url_for('login'))
     else:
-        return render_template('game.html')      
-  
+        return render_template('game.html')
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
 def loginhtml():
@@ -61,7 +59,7 @@ def registerhtml():
 @app.route("/login", methods=["GET", "POST"])
 def login():
   if 'username' in session:
-      return redirect(url_for('homepage'))  
+      return redirect(url_for('homepage'))
   if request.method == 'POST':
     username = request.form.get('username', '').strip()
     password = request.form.get('password', '')
@@ -84,7 +82,7 @@ def login():
 
   return render_template('login.html', error="")
 
-    
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
   if request.method == "POST":
@@ -99,8 +97,6 @@ def register():
     if password != confirm:
       return render_template("register.html", error="Passwords do not match!")
 
-
-
     db = sqlite3.connect(DB_NAME)
     c = db.cursor()
 
@@ -109,8 +105,8 @@ def register():
       db.close()
       return render_template("register.html", error="Username already taken!")
 
-    c.execute("INSERT INTO users VALUES (?, ?, ?, ?)",
-    (username, password, reviews, 0))
+    c.execute("INSERT INTO users (username, password, reviews) VALUES (?, ?, ?)",
+    (username, password, reviews))
 
     db.commit()
     db.close()
