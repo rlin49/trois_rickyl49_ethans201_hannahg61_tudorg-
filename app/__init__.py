@@ -66,7 +66,7 @@ def game():
     if 'username' not in session:
         return redirect(url_for('login'))
     else:
-        return render_template('game.html')  
+        return render_template('game.html')
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
 def loginhtml():
@@ -111,6 +111,7 @@ def login():
 def register():
   if request.method == "POST":
     username = request.form.get("username", "").strip()
+    # email = request.form.get("email", "").strip() why would we need an email
     password = request.form.get("password", "")
     confirm = request.form.get("confirm", "")
     reviews=""
