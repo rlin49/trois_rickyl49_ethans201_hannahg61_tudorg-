@@ -89,11 +89,11 @@ def login():
 def register():
   if request.method == "POST":
     username = request.form.get("username", "").strip()
-    email = request.form.get("email", "").strip()
+    # email = request.form.get("email", "").strip() why would we need an email
     password = request.form.get("password", "")
     confirm = request.form.get("confirm", "")
     reviews=""
-    if not username or not email or not password or not confirm:
+    if not username or not password or not confirm:
       return render_template("register.html", error="All fields are required!")
 
     if password != confirm:
