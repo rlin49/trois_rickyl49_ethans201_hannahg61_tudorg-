@@ -58,7 +58,33 @@ def registerhtml():
         return redirect("/")
     return render_template("register.html")
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+  if 'username' in session:
+      return redirect(url_for('homepage'))  
+  if request.method == 'POST':
+    username = request.form.get('username', '').strip()
+    password = request.form.get('password', '')
 
+    if not username or not password:
+      return render_template('login.html', error="Please enter both username and password")
+
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("SELECT username, password FROM users WHERE username = ?", (username,))
+    user = c.fetchone()
+    db.close()
+
+    if not user or user[1] != password:
+      text = "Login failed. Invalid username or password."
+      return render_template('login.html', error=text)
+
+    session['username'] = username
+    return redirect(url_for('homepage'))
+
+  return render_template('login.html', error="")
+
+    
 @app.route("/register", methods=["GET", "POST"])
 def register():
   if request.method == "POST":
