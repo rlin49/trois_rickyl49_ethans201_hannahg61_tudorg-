@@ -17,7 +17,9 @@ DBC.execute("CREATE TABLE IF NOT EXISTS reviews(game_id INT, body TEXT, user_id 
 
 @app.route("/")
 def main():
-    return render_template("login.html")
+    if 'username' not in session:
+        return render_template("login.html")
+    return redirect(url_for('homepage'))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -82,8 +84,13 @@ def homepage():
     else:
         return render_template('homepage.html',error="")
         
-        
-    
+@app.route("/game")
+def game():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    else:
+        return render_template('game.html')      
+  
             
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
