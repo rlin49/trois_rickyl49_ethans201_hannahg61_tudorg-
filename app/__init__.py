@@ -19,7 +19,7 @@ app.secret_key = "secret_key_testing"
 
 @app.route("/")
 def main():
-    return render_template("login.html")
+    return redirect(url_for("login"))
 
 
 
@@ -36,7 +36,29 @@ def homepage():
     else:
         return render_template('homepage.html',error="")
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+     if request.method == 'POST':
+       username = request.form.get('username', '').strip()
+       password = request.form.get('password', '')
 
+       if not username or not password:
+         return render_template('login.html', error="Please enter both username and password")
+
+       db = sqlite3.connect(DB_NAME)
+       c = db.cursor()
+       c.execute("SELECT username, password FROM users WHERE username = ?", (username,))
+       user = c.fetchone()
+       db.close()
+
+       if not user or user[1] != password:
+         text = "Login failed. Invalid username or password."
+         return render_template('login.html', error=text)
+
+       session['username'] = username
+       return redirect(url_for('homepage'))
+
+     return render_template('login.html', error="")
 
 
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
@@ -57,17 +79,14 @@ def registerhtml():
 def register():
   if request.method == "POST":
     username = request.form.get("username", "").strip()
-    email = request.form.get("email", "").strip()
     password = request.form.get("password", "")
     confirm = request.form.get("confirm", "")
     reviews=""
-    if not username or not email or not password or not confirm:
+    if not username or not password or not confirm:
       return render_template("register.html", error="All fields are required!")
 
     if password != confirm:
       return render_template("register.html", error="Passwords do not match!")
-
-
 
     db = sqlite3.connect(DB_NAME)
     c = db.cursor()
@@ -77,8 +96,8 @@ def register():
       db.close()
       return render_template("register.html", error="Username already taken!")
 
-    c.execute("INSERT INTO users VALUES (?, ?, ?, ?)",
-    (username, password, reviews, 0))
+    c.execute("INSERT INTO users (username, password, reviews) VALUES (?, ?, ?)",
+    (username, password, reviews))
 
     db.commit()
     db.close()
