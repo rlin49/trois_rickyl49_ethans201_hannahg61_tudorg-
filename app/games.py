@@ -110,7 +110,7 @@ def get_reviews(game_info):
     DB.close()
     return DBCF[0]
     
-def add_review(rev_id, game_info): # REVIEW SHOULD ALREADY BE MADE. USE REVIEWS.MAKE_REVIEW FOR THAT
+def add_review(rev_id, game_info): # THIS EXISTS TO MAKE reviews.make_review() EASIER. PROB DON'T CALL THIS ON YOUR OWN
     DB = sqlite3.connect(DB_NAME)
     DBC = DB.cursor()
     

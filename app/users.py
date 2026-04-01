@@ -14,6 +14,18 @@ def get_id(username):
     DB.close()
     return DBCF[0]
     
+def get_username(user_id):
+    DB = sqlite3.connect(DB_NAME)
+    DBC = DB.cursor()
+    
+    DBC.execute("SELECT username FROM users WHERE id = ?;", (user_id, ))
+    DBCF = DBC.fetchone()
+    if DBCF is None:
+        return None
+    DB.commit()
+    DB.close()
+    return DBCF[0]
+    
 def get_reviews(user_info):
     DB = sqlite3.connect(DB_NAME)
     DBC = DB.cursor()
@@ -45,5 +57,17 @@ def add_review(rev_id, user_info):
     else:
         DBC.execute("UPDATE users SET reviews = ? WHERE LOWER(username) LIKE LOWER(?);", (reviews, user_info, ))
     
+    DB.commit()
+    DB.close()
+    
+def purge_reviews(user_info):
+    DB = sqlite3.connect(DB_NAME)
+    DBC = DB.cursor()
+    
+    if isinstance(user_info, int):
+        DBC.execute("UPDATE users SET reviews = NULL WHERE id = ?;", (user_info, ))
+    else:
+        DBC.execute("UPDATE users SET reviews = NULL WHERE LOWER(username) LIKE LOWER(?);", (user_info, ))
+        
     DB.commit()
     DB.close()
