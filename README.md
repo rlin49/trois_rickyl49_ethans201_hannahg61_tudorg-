@@ -11,7 +11,7 @@ Tudor: Database sanitation, APIs, backend
 # description
 Users are given game information and have to guess total sales, which updates a graph showing their guesses vs actual sales, growing each round. On their own profile, users can rank their favorite games while also seeing their accuracy in games. Users will be able to view other players profiles, while also seeing the top players and top rated games. 
 
-#### Visit our live site at [167.71.85.43](167.71.85.43)
+#### Visit our live site at [http://167.71.85.43](167.71.85.43)
 
 # Install Guide:
 
