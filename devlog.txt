@@ -5,3 +5,6 @@ rickyL -- 2026-03-24 10:30
 
 tudorG -- 2026-03-30 18:00
 - Updating database and adding database helper functions
+
+tudorG -- 2026-03-31 20:30
+- Minor updates to database helper functions, getting basics of register and login working
