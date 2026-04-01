@@ -34,7 +34,8 @@ def homepage():
     if 'username' not in session:
         return redirect(url_for('login'))
     else:
-        return render_template('homepage.html',error="")
+        username='username'
+        return render_template('homepage.html',username=username, error="")
 
 
 @app.route("/game")
@@ -43,6 +44,20 @@ def game():
         return redirect(url_for('login'))
     else:
         return render_template('game.html')
+
+@app.route("/profile/<username>")
+def profile(username):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    user=session['username']
+    print(user)
+    if username != session['username']:
+        is_own_profile=False
+    else:
+        is_own_profile=True
+    print(is_own_profile)
+    return render_template("profile.html",username=user, is_own_profile=is_own_profile)
+
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
 def loginhtml():
