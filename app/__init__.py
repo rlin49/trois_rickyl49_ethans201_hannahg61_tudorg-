@@ -34,8 +34,8 @@ def homepage():
     if 'username' not in session:
         return redirect(url_for('login'))
     else:
-        username='username'
-        return render_template('homepage.html',username=username, error="")
+        username = session['username']
+        return render_template('homepage.html',username= username, error="")
 
 
 @app.route("/game", methods = ["GET", "POST"])
@@ -79,8 +79,8 @@ def game():
 
 
 
-        # game_index = random.randint(0, len(data_keys))
-        game_index = random.randint(0,100)
+        game_index = random.randint(0, len(data_keys))
+        # game_index = random.randint(0,100)
         game_name = data_keys[game_index]
         info_dict = data[game_name]
 
