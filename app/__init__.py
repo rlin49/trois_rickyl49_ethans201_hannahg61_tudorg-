@@ -54,18 +54,21 @@ def game():
             check_name = data_keys[int(request.form["game_index"])]
             check_dict = data[check_name]
 
+            #print(request.form["game_arr"])
             game_arr = request.form["game_arr"].split(";")
             guessed_amt = request.form["guess_arr"].split(";")
             real_amt = request.form["ans_arr"].split(";")
 
-            game_arr.append(str(int(request.form["game_index"])))
+
+            game_arr.append(data_keys[int(request.form["game_index"])])
             guessed_amt.append(str(round(float(request.form["guessed_sales"]), 4)))
             real_amt.append(str(round(float(check_dict["Global_Sales"]), 4)))
-
+            #print(game_arr)
 
             guessed_amt = ";".join(guessed_amt)
             real_amt = ";".join(real_amt)
             game_arr = ";".join(game_arr)
+            # print(game_arr)
 
             if guessed_amt[0] == ";":
                 guessed_amt = guessed_amt[1:]
@@ -76,7 +79,8 @@ def game():
 
 
 
-        game_index = random.randint(0, len(data_keys))
+        # game_index = random.randint(0, len(data_keys))
+        game_index = random.randint(0,100)
         game_name = data_keys[game_index]
         info_dict = data[game_name]
 
@@ -90,6 +94,10 @@ def game():
         if public_rating == -1:
             public_rating = "No Metacritic Score was Available"
         description = info_dict["description"]
+        description = description.replace("<br />", "")
+        description = description.replace("<p>", "")
+        description = description.replace("</p>", "")
+
 
         return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description)
 

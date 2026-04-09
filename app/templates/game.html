@@ -1,17 +1,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-<form action = "/game" method = "POST">
-How many units do you think this game sold? (in millions) <input type = "number" name="guessed_sales" min="0" max="1000000" step="any">
-<br>
-<input type = "hidden" name = "game_index" value = {{game_index}}>
-<input type = "hidden" name = "guess_arr" value = {{guess_arr}}>
-<input type = "hidden" name = "ans_arr" value = {{ans_arr}}>
-<input type = "hidden" name = "game_arr" value = {{game_arr}}>
-<input type = "submit" style="border-10">
 
-</form>
+<div class="w-[50%] p-5">
+  <canvas id = "chart"></canvas>
+</div>
 
+<div class = "w-full pl-5 pr-5">
 <br>
 <b>{{ game_name }}</b> #{{ rank }}
 <br>
@@ -27,7 +22,23 @@ Metacritic Score: {{ rating }}
 <br>
 Description: {{ description | safe }}
 
-<canvas id = "chart" width = '800'></canvas>
+<br><br>
+</div>
+
+
+<form action = "/game" method = "POST" class = "pl-5">
+How many units do you think this game sold? (in millions) <input class="border-2 p-1" type = "number" name="guessed_sales" min="0" max="1000000" step="any">
+<input type = "hidden" name = "game_index" value = {{game_index}}>
+<input type = "hidden" name = "guess_arr" value = {{guess_arr}}>
+<input type = "hidden" name = "ans_arr" value = {{ans_arr}}>
+<input type = "hidden" name = "game_arr" value = '{{ game_arr }}'>
+<input type = "submit" class="border-2 p-1">
+
+</form>
+
+
+
+
 
 <script>
 
@@ -59,7 +70,18 @@ Description: {{ description | safe }}
     {
       type: 'line',
       data: data,
+      options: {
+      scales: {
+         x: {
+            ticks: {
+               minRotation: 75
+            }
+         },
+      },
+
+   }
     }
+
   )
 
 
