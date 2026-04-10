@@ -37,6 +37,62 @@ def homepage():
         username = session['username']
         return render_template('homepage.html',username= username, error="")
 
+@app.route("/gamepage", methods = ["GET", "POST"])
+def gamepage():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if "game_id" not in request.args:
+        return redirect(url_for('search'))
+
+    json_file = open("Data/games.json", "r")
+    data = json.load(json_file)
+    data_keys = list(data.keys())
+
+    game_id = int(request.args["game_id"])
+    if game_id < 0 or game_id >= len(data_keys):
+        return redirect(url_for("homepage"))
+
+
+    game_name = data_keys[game_id]
+    info_dict = data[game_name]
+
+
+    rank = info_dict["Rank"]
+    platforms = info_dict["Platform"]
+    year = info_dict["Year"]
+    genre = info_dict["Genre"]
+    publisher = info_dict["Publisher"]
+    na_sales = info_dict["NA_Sales"]
+    eu_sales = info_dict["EU_Sales"]
+    jp_sales = info_dict["JP_Sales"]
+    other_sales = info_dict["Other_Sales"]
+    global_sales = info_dict["Global_Sales"]
+    rating = info_dict["public_rating"]
+    if rating == -1:
+        rating = "No Metacritic Score was Available"
+    description = info_dict["description"]
+    description = description.replace("<br />", "")
+    description = description.replace("<p>", "")
+    description = description.replace("</p>", "")
+
+    return render_template("gamepage.html", game_id = game_id, game_name = game_name, rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+
+@app.route("/search", methods = ["GET", "POST"])
+def search():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if "game_name" in request.args:
+        db = sqlite3.connect(DB_NAME)
+        c = db.cursor()
+        c.execute("SELECT * FROM games WHERE name LIKE ?;", (request.args["game_name"], ))
+        fetch = c.fetchall()
+
+        game_arr = ""
+        for game in fetch:
+            game_arr += f"<a href = '/gamepage?game_id={game[4] - 1}'>{game[0]}</a><br>"
+        return render_template("search.html", games = game_arr)
+    else:
+        return render_template("search.html", searching = True)
 
 @app.route("/game", methods = ["GET", "POST"])
 def game():

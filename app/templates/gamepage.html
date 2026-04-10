@@ -1,0 +1,52 @@
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<div id = "fullscreen" class = "flex">
+
+<div id = "game-info" class = "pl-5 pt-2 w-[50%] pr-2">
+
+<div id = "name-rank" class = "pb-1">
+<b>{{ game_name }}</b> #{{ rank }}
+</div> <!-- name-rank -->
+
+<div id = "basic-info" class = "pt-1 pb-1">
+Platform(s): {{ platforms }}
+<br>
+Year: {{ year }}
+<br>
+Genre: {{ genre }}
+<br>
+Publisher: {{ publisher }}
+<br>
+Metacritic Score: {{ rating }}
+</div> <!-- basic-info -->
+
+<div id = "description" class = "pt-1 pb-1 text-justify">
+Description: {{ description | safe }}
+</div> <!-- description -->
+
+<div id = "sales-info" class = "pt-1">
+NA Sales: {{ na_sales }}
+<br>
+EU Sales: {{ eu_sales }}
+<br>
+JP Sales: {{ jp_sales }}
+<br>
+Other Sales: {{ other_sales }}
+<br>
+Global Sales: {{ global_sales }}
+</div> <!-- sales-info -->
+
+</div> <!-- game-info -->
+
+<div id = "review-form" class = "w-[50%] pr-5 pt-2 pl-2">
+
+<form action = "/review" method = "POST">
+<textarea name = "body-text" rows = "20" cols = "100" class = "border-2 p-2"></textarea>
+<input type = "hidden" name = "game_id" value = '{{ game_id }}'>
+<input type = "SUBMIT">
+</form>
+
+</div> <!-- review-form -->
+
+
+</div> <!-- fullscreen -->
