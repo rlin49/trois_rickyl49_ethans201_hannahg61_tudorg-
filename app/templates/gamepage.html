@@ -36,12 +36,19 @@ Other Sales: {{ other_sales }}
 Global Sales: {{ global_sales }}
 </div> <!-- sales-info -->
 
+<div id = "reviews" class = "pt-5">
+  User Reviews: <br>
+  <div class = "ml-4">
+    {{ reviews | safe }}
+  </div>
+</div> <!-- reviews -->
+
 </div> <!-- game-info -->
 
 <div id = "review-form" class = "w-[50%] pr-5 pt-2 pl-2">
 
 <form action = "/review" method = "POST">
-<textarea name = "body-text" rows = "20" cols = "100" class = "border-2 p-2"></textarea>
+<textarea name = "body_text" rows = "20" cols = "100" class = "border-2 p-2"></textarea>
 <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
 <input type = "SUBMIT">
 </form>

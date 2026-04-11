@@ -32,7 +32,7 @@ def get_rating(game_info):
     DBC = DB.cursor()
 
     if isinstance(game_info, int):
-        DBC.execute("SELECT user_rating FROM games WHERE id = ?;", (game_info, ))
+        DBC.execute("SELECT user_rating FROM games WHERE id = ?;", (game_info + 1, ))
     else:
         DBC.execute("SELECT user_rating FROM games WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 
@@ -48,7 +48,7 @@ def get_num_ratings(game_info):
     DBC = DB.cursor()
 
     if isinstance(game_info, int):
-        DBC.execute("SELECT num_ratings FROM games WHERE id = ?;", (game_info, ))
+        DBC.execute("SELECT num_ratings FROM games WHERE id = ?;", (game_info + 1, ))
     else:
         DBC.execute("SELECT num_ratings FROM games WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 
@@ -72,8 +72,8 @@ def add_rating(rating, game_info):
     new_num_ratings = num_ratings + 1
 
     if isinstance(game_info, int):
-        DBC.execute("UPDATE games SET num_ratings = ? WHERE id = ?;", (new_num_ratings, game_info, ))
-        DBC.execute("UPDATE games SET user_rating = ? WHERE id = ?;", (new_rating, game_info, ))
+        DBC.execute("UPDATE games SET num_ratings = ? WHERE id = ?;", (new_num_ratings, game_info + 1, ))
+        DBC.execute("UPDATE games SET user_rating = ? WHERE id = ?;", (new_rating, game_info + 1, ))
     else:
         DBC.execute("UPDATE games SET num_ratings = ? WHERE LOWER(name) LIKE LOWER(?);", (new_num_ratings, game_info, ))
         DBC.execute("UPDATE games SET user_rating = ? WHERE LOWER(name) LIKE LOWER(?)?;", (new_rating, game_info, ))
@@ -86,8 +86,8 @@ def purge_ratings(game_info):
     DBC = DB.cursor()
 
     if isinstance(game_info, int):
-        DBC.execute("UPDATE games SET num_ratings = 0 WHERE id = ?;", (game_info, ))
-        DBC.execute("UPDATE games SET user_rating = 0 WHERE id = ?;", (game_info, ))
+        DBC.execute("UPDATE games SET num_ratings = 0 WHERE id = ?;", (game_info + 1, ))
+        DBC.execute("UPDATE games SET user_rating = 0 WHERE id = ?;", (game_info + 1, ))
     else:
         DBC.execute("UPDATE games SET num_ratings = 0 WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
         DBC.execute("UPDATE games SET user_rating = 0 LOWER(name) LIKE LOWER(?);", (game_info, ))
@@ -100,11 +100,13 @@ def get_reviews(game_info):
     DBC = DB.cursor()
 
     if isinstance(game_info, int):
-        DBC.execute("SELECT reviews FROM games WHERE id = ?;", (game_info, ))
+        DBC.execute("SELECT reviews FROM games WHERE id = ?;", (game_info + 1, ))
     else:
         DBC.execute("SELECT reviews FROM games WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 
     DBCF = DBC.fetchone()
+    if DBCF is None:
+        return ""
     if DBCF[0] is None:
         return ""
     DB.commit()
@@ -121,13 +123,17 @@ def add_review(rev_id, game_info): # THIS EXISTS TO MAKE reviews.make_review() E
     else:
         reviews = rev_id
 
+    print(f"Rev Id: {reviews}")
+    print(game_info)
     if isinstance(game_info, int):
-        DBC.execute("UPDATE games SET reviews = ? WHERE id = ?;", (reviews, game_info, ))
+        print('up')
+        DBC.execute("UPDATE games SET reviews = ? WHERE id = ?;", (reviews, game_info + 1, ))
     else:
         DBC.execute("UPDATE games SET reviews = ? WHERE LOWER(name) LIKE LOWER(?);", (reviews, game_info, ))
 
     DB.commit()
     DB.close()
+    return ""
 
 
 def purge_reviews(game_info):
@@ -135,7 +141,7 @@ def purge_reviews(game_info):
     DBC = DB.cursor()
 
     if isinstance(game_info, int):
-        DBC.execute("UPDATE games SET reviews = NULL WHERE id = ?;", (game_info, ))
+        DBC.execute("UPDATE games SET reviews = NULL WHERE id = ?;", (game_info + 1, ))
     else:
         DBC.execute("UPDATE games SET reviews = NULL WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 

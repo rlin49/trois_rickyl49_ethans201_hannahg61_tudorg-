@@ -1,5 +1,6 @@
 from flask import *
 import os, json, sqlite3, random
+import games, users, reviews
 
 app = Flask(__name__)
 
@@ -37,18 +38,19 @@ def homepage():
         username = session['username']
         return render_template('homepage.html',username= username, error="")
 
-@app.route("/gamepage", methods = ["GET", "POST"])
-def gamepage():
+@app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
+def gamepage(game_id):
     if 'username' not in session:
         return redirect(url_for('login'))
-    if "game_id" not in request.args:
-        return redirect(url_for('search'))
+    # if "game_id" not in request.args:
+    #     return redirect(url_for('search'))
 
     json_file = open("Data/games.json", "r")
     data = json.load(json_file)
     data_keys = list(data.keys())
 
-    game_id = int(request.args["game_id"])
+    game_id = int(game_id)
+    # game_id = int(request.args["game_id"])
     if game_id < 0 or game_id >= len(data_keys):
         return redirect(url_for("homepage"))
 
@@ -75,7 +77,35 @@ def gamepage():
     description = description.replace("<p>", "")
     description = description.replace("</p>", "")
 
-    return render_template("gamepage.html", game_id = game_id, game_name = game_name, rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+    review_arr= games.get_reviews(game_id).split(";")
+    review_str = ""
+
+    for rev in review_arr:
+        review_str += reviews.get_review(rev)
+        review_str += "<br>"
+
+    return render_template("gamepage.html", game_id = game_id, game_name = game_name, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+
+@app.route("/review", methods = ["GET", "POST"])
+def review():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if 'game_id' not in request.form or 'body_text' not in request.form:
+        return redirect(url_for('search'))
+
+    game_id = int(request.form["game_id"])
+    body_text = request.form["body_text"]
+    temp = ""
+
+    for i in body_text:
+        if i != ">" and i != "<":
+            temp += i
+
+    body_text = temp
+    user_id = users.get_id(session["username"])
+
+    reviews.make_review(body_text, user_id, game_id)
+    return redirect(f"/gamepage/{game_id}")
 
 @app.route("/search", methods = ["GET", "POST"])
 def search():
@@ -84,12 +114,12 @@ def search():
     if "game_name" in request.args:
         db = sqlite3.connect(DB_NAME)
         c = db.cursor()
-        c.execute("SELECT * FROM games WHERE name LIKE ?;", (request.args["game_name"], ))
+        c.execute("SELECT * FROM games WHERE name LIKE concat('%',?,'%');", (request.args["game_name"], ))
         fetch = c.fetchall()
 
         game_arr = ""
         for game in fetch:
-            game_arr += f"<a href = '/gamepage?game_id={game[4] - 1}'>{game[0]}</a><br>"
+            game_arr += f"<a href = '/gamepage/{game[4] - 1}'>{game[0]}</a><br>"
         return render_template("search.html", games = game_arr)
     else:
         return render_template("search.html", searching = True)
@@ -232,7 +262,7 @@ def register():
       db.close()
       return render_template("register.html", error="Username already taken!")
 
-    c.execute("INSERT INTO users (username, password, reviews) VALUES (?, ?, ?)",
+    c.execute("INSERT INTO users VALUES (?, ?, ?, NULL)",
     (username, password, reviews))
 
     db.commit()

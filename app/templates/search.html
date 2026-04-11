@@ -1,10 +1,19 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
+<html class="flex justify-center">
+
 {% if searching %}
-  <form action = "/search" method = "GET">
-  Enter Game Name: <input type = "text" name = "game_name">
-  <input type = "submit">
-  </form>
+  <div>
+    <form action = "/search" method = "GET">
+    Enter Game Name: <input type = "text" name = "game_name">
+    <input type = "submit">
+    </form>
+  </div>
 {% else %}
+ <div class = "p-2">
   {{ games | safe }}
+ </div>
 {% endif %}
+
+
+</html>
