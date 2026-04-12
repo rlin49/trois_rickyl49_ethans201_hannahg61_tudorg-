@@ -2,23 +2,20 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
 
-<nav class="w-full flex items-center justify-between p-4 border-b bg-gray-100">
-  <div class="font-bold text-lg">
-    Game Guessing App
-  </div>
-  <div class="flex gap-4 items-center">
-    <a href="/homepage" class="px-3 py-1 border rounded hover:bg-gray-200">
-      Home
+<nav class="bg-gray-100 border-b">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    
+    <a href="/game" class="text-lg font-semibold text-gray-800">
+      GAME
     </a>
-    <a href="/search" class="px-3 py-1 border rounded hover:bg-gray-200">
-      Search
-    </a>
-    <a href="/game" class="px-3 py-1 border rounded hover:bg-gray-200">
-      Exit Game
-    </a>
-    <a href="/logout" class="px-3 py-1 border rounded bg-red-200 hover:bg-red-300">
-      Logout
-    </a>
+
+    <ul class="flex space-x-4">
+      <li>
+        <a href="/homepage" class="text-gray-700 hover:text-black">
+          Home
+        </a>
+      </li>
+    </ul>
   </div>
 </nav>
 
