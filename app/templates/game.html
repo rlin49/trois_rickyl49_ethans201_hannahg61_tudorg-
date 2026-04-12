@@ -1,39 +1,8 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 
 <div class="w-[50%] p-5">
   <canvas id="chart"></canvas>
 </div>
-
-<div class="w-full pl-5 pr-5">
-  <br>
-  <b>{{ game_name }}</b> #{{ rank }}
-  <br>
-  Platform: {{ platform }}
-  <br>
-  Year: {{ year }}
-  <br>
-  Genre: {{ genre }}
-  <br>
-  Publisher: {{ publisher }}
-  <br>
-  Metacritic Score: {{ rating }}
-  <br>
-  Description: {{ description | safe }}
-  <br><br>
-</div>
-
-<form action="/game" method="POST" class="pl-5">
-  How many units do you think this game sold? (in millions)
-  <input class="border-2 p-1" type="number" name="guessed_sales" min="0" max="1000000" step="any">
-
-  <input type="hidden" name="game_index" value="{{ game_index }}">
-  <input type="hidden" name="guess_arr" value="{{ guess_arr }}">
-  <input type="hidden" name="ans_arr" value="{{ ans_arr }}">
-  <input type="hidden" name="game_arr" value='{{ game_arr }}'>
-
-  <input type="submit" class="border-2 p-1">
-</form>
 
 <script>
   const ctx = document.querySelector("#chart").getContext("2d");
@@ -43,33 +12,42 @@
   const labels = "{{ game_arr }}".split(";");
 
   const data = {
-    labels: labels,
+    labels,
     datasets: [
-      {
-        label: "Guesses",
-        data: guess_arr,
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
-        borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-        grouped: false
-      },
+      // 🔴 REAL ANSWERS (background)
       {
         label: "Real Answers",
         data: ans_arr,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "rgba(255, 99, 132, 0.35)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
-        grouped: false
+        grouped: false,
+        order: 1
+      },
+
+      // 🔵 GUESSES (on top)
+      {
+        label: "Guesses",
+        data: guess_arr,
+        backgroundColor: "rgba(54, 162, 235, 0.9)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 2,
+        grouped: false,
+        order: 2
       }
     ]
   };
 
-  const chart = new Chart(ctx, {
+  new Chart(ctx, {
     type: "bar",
-    data: data,
+    data,
     options: {
-      indexAxis: "y",   // 🔥 makes it horizontal
+      indexAxis: "y",
       responsive: true,
+      plugins: {
+        tooltip: { mode: "index" },
+        legend: { position: "top" }
+      },
       scales: {
         x: {
           beginAtZero: true
