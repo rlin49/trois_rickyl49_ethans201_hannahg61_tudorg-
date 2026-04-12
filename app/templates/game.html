@@ -11,30 +11,29 @@
   const ans_arr = "{{ ans_arr }}".split(";").map(Number);
   const labels = "{{ game_arr }}".split(";");
 
-  // Compute per-category layering
-  const minVals = guess_arr.map((g, i) => Math.min(g, ans_arr[i]));
-  const maxVals = guess_arr.map((g, i) => Math.max(g, ans_arr[i]));
-
   const data = {
     labels,
     datasets: [
+      // 🔴 BIGGER VALUE (background layer)
       {
-        label: "Larger Value",
-        data: maxVals,
-        backgroundColor: "rgba(180, 180, 180, 0.35)",
-        borderColor: "rgba(120, 120, 120, 1)",
+        label: "Real Answers",
+        data: ans_arr,
+        backgroundColor: "rgba(255, 99, 132, 0.25)",
+        borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
         order: 2,
-        barThickness: 14
+        grouped: false
       },
+
+      // 🔵 GUESS (always on top visually)
       {
-        label: "Smaller Value",
-        data: minVals,
-        backgroundColor: "rgba(54, 162, 235, 0.9)",
+        label: "Guesses",
+        data: guess_arr,
+        backgroundColor: "rgba(54, 162, 235, 1)",
         borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
+        borderWidth: 2,
         order: 1,
-        barThickness: 14
+        grouped: false
       }
     ]
   };
@@ -53,11 +52,6 @@
           ticks: {
             autoSkip: false
           }
-        }
-      },
-      plugins: {
-        legend: {
-          position: "top"
         }
       }
     }
