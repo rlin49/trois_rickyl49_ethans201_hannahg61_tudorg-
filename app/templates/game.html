@@ -1,102 +1,81 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-
-<nav class="bg-gray-100 border-b">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-    
-    <a href="/game" class="text-lg font-semibold text-gray-800">
-      GAME
-    </a>
-
-    <ul class="flex space-x-4">
-      <li>
-        <a href="/homepage" class="text-gray-700 hover:text-black">
-          Home
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
 
 <div class="w-[50%] p-5">
   <canvas id="chart"></canvas>
 </div>
-<div class="w-full pl-5 pr-5">
-<br>
-<b>{{ game_name }}</b> #{{ rank }}
-<br>
-Platform: {{ platform }}
-<br>
-Year: {{ year }}
-<br>
-Genre: {{ genre }}
-<br>
-Publisher: {{ publisher }}
-<br>
-Metacritic Score: {{ rating }}
-<br>
-Description: {{ description | safe }}
 
-<br><br>
+<div class="w-full pl-5 pr-5">
+  <br>
+  <b>{{ game_name }}</b> #{{ rank }}
+  <br>
+  Platform: {{ platform }}
+  <br>
+  Year: {{ year }}
+  <br>
+  Genre: {{ genre }}
+  <br>
+  Publisher: {{ publisher }}
+  <br>
+  Metacritic Score: {{ rating }}
+  <br>
+  Description: {{ description | safe }}
 </div>
 
 <form action="/game" method="POST" class="pl-5">
   How many units do you think this game sold? (in millions)
-  <input class="border-2 p-1" type="number" name="guessed_sales" min="0" max="1000000" step="any">
+  <input class="border-2 p-1" type="number" name="guessed_sales" min="0" step="any">
 
-  <input type="hidden" name="game_index" value={{game_index}}>
-  <input type="hidden" name="guess_arr" value={{guess_arr}}>
-  <input type="hidden" name="ans_arr" value={{ans_arr}}>
-  <input type="hidden" name="game_arr" value='{{ game_arr }}'>
+  <input type="hidden" name="game_index" value="{{ game_index }}">
+  <input type="hidden" name="guess_arr" value="{{ guess_arr }}">
+  <input type="hidden" name="ans_arr" value="{{ ans_arr }}">
+  <input type="hidden" name="game_arr" value="{{ game_arr }}">
 
   <input type="submit" class="border-2 p-1">
 </form>
 
-
 <script>
-  const ctx = document.querySelector("#chart");
+  const ctx = document.getElementById("chart").getContext("2d");
 
-  var guess_arr = "{{guess_arr}}";
-  var ans_arr = "{{ans_arr}}";
-  var game_arr = "{{game_arr}}";
-
-  const labels = game_arr ? game_arr.split(";") : [];
+  const guess_arr = "{{ guess_arr }}".split(";").map(Number);
+  const ans_arr = "{{ ans_arr }}".split(";").map(Number);
+  const labels = "{{ game_arr }}".split(";");
 
   const data = {
     labels: labels,
     datasets: [
       {
         label: "Guesses",
-        data: guess_arr ? guess_arr.split(";") : [],
-        backgroundColor: "rgba(255, 99, 71, 0.6)"
+        data: guess_arr,
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+        grouped: false
       },
       {
         label: "Real Answers",
-        data: ans_arr ? ans_arr.split(";") : [],
-        backgroundColor: "rgba(59, 130, 246, 0.6)"
+        data: ans_arr,
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+        grouped: false
       }
     ]
   };
 
-  const chart = new Chart(ctx, {
-    type: 'bar',
+  new Chart(ctx, {
+    type: "bar",
     data: data,
     options: {
-      indexAxis: 'y', // horizontal bar chart
       responsive: true,
       scales: {
         x: {
-          beginAtZero: true,
-          title: {
-            display: true,
-            text: 'Sales (millions)'
+          ticks: {
+            minRotation: 75
           }
         },
         y: {
-          ticks: {
-            autoSkip: false
-          }
+          beginAtZero: true
         }
       }
     }
