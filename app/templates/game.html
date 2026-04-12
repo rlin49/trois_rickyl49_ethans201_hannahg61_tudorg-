@@ -2,87 +2,107 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
 
+<nav class="bg-gray-100 border-b">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    
+    <a href="/game" class="text-lg font-semibold text-gray-800">
+      GAME
+    </a>
+
+    <ul class="flex space-x-4">
+      <li>
+        <a href="/homepage" class="text-gray-700 hover:text-black">
+          Home
+        </a>
+      </li>
+    </ul>
+
+    <a href="/logout" 
+       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       Logout
+    </a>
+
+  </div>
+</nav>
 <div class="w-[50%] p-5">
-  <canvas id = "chart"></canvas>
+  <canvas id="chart"></canvas>
 </div>
 
-<div class = "w-full pl-5 pr-5">
-<br>
-<b>{{ game_name }}</b> #{{ rank }}
-<br>
-Platform: {{ platform }}
-<br>
-Year: {{ year }}
-<br>
-Genre: {{ genre }}
-<br>
-Publisher: {{ publisher }}
-<br>
-Metacritic Score: {{ rating }}
-<br>
-Description: {{ description | safe }}
-
-<br><br>
+<div class="w-full pl-5 pr-5">
+  <br>
+  <b>{{ game_name }}</b> #{{ rank }}
+  <br>
+  Platform: {{ platform }}
+  <br>
+  Year: {{ year }}
+  <br>
+  Genre: {{ genre }}
+  <br>
+  Publisher: {{ publisher }}
+  <br>
+  Metacritic Score: {{ rating }}
+  <br>
+  Description: {{ description | safe }}
+  <br><br>
 </div>
 
+<form action="/game" method="POST" class="pl-5">
+  How many units do you think this game sold? (in millions)
+  <input class="border-2 p-1" type="number" name="guessed_sales" min="0" max="1000000" step="any">
 
-<form action = "/game" method = "POST" class = "pl-5">
-How many units do you think this game sold? (in millions) <input class="border-2 p-1" type = "number" name="guessed_sales" min="0" max="1000000" step="any">
-<input type = "hidden" name = "game_index" value = {{game_index}}>
-<input type = "hidden" name = "guess_arr" value = {{guess_arr}}>
-<input type = "hidden" name = "ans_arr" value = {{ans_arr}}>
-<input type = "hidden" name = "game_arr" value = '{{ game_arr }}'>
-<input type = "submit" class="border-2 p-1">
+  <input type="hidden" name="game_index" value="{{ game_index }}">
+  <input type="hidden" name="guess_arr" value="{{ guess_arr }}">
+  <input type="hidden" name="ans_arr" value="{{ ans_arr }}">
+  <input type="hidden" name="game_arr" value='{{ game_arr }}'>
 
+  <input type="submit" class="border-2 p-1">
 </form>
 
-
-
-
-
 <script>
+  const ctx = document.querySelector("#chart").getContext("2d");
 
-  const ctx = document.querySelector("#chart");
-  var guess_arr = "{{guess_arr}}";
-  var ans_arr = "{{ans_arr}}";
-  var game_arr = "{{game_arr}}";
+  const guess_arr = "{{ guess_arr }}".split(";").map(Number);
+  const ans_arr = "{{ ans_arr }}".split(";").map(Number);
+  const labels = "{{ game_arr }}".split(";");
 
-  console.log(guess_arr.split(";"));
-  console.log(ans_arr.split(";"));
-  console.log(game_arr.split(";"));
-
-  const labels = game_arr.split(";");
   const data = {
     labels: labels,
-    datasets: [{
-      label: "Guesses",
-      data: guess_arr.split(";"),
-    },
-    {
-      label: "Real Answers",
-      data: ans_arr.split(";")
-    }
+    datasets: [
+      {
+        label: "Guesses",
+        data: guess_arr,
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1,
+        //grouped: false
+      },
+      {
+        label: "Real Answers",
+        data: ans_arr,
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+        //grouped: false
+      }
     ]
   };
 
-  const chart = new Chart (
-    ctx,
-    {
-      type: 'line',
-      data: data,
-      options: {
+  const chart = new Chart(ctx, {
+    type: "bar",
+    data: data,
+    options: {
+      indexAxis: "y",   
+      responsive: true,
       scales: {
-         x: {
-            ticks: {
-               minRotation: 75
-            }
-         },
-      },
-
-   }
+        x: {
+          beginAtZero: true
+        },
+        y: {
+          ticks: {
+            autoSkip: false
+          }
+        }
+      }
     }
-
-  )
-
-
+  });
 </script>
