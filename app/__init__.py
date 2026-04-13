@@ -77,12 +77,26 @@ def gamepage(game_id):
     description = description.replace("<p>", "")
     description = description.replace("</p>", "")
 
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+
+    c.execute("SELECT user_id FROM reviews WHERE game_id= ?", (str(game_id)))
+    fetch=c.fetchall()
+    print(fetch)
+
     review_arr= games.get_reviews(game_id).split(";")
     review_str = ""
 
-    for rev in review_arr:
-        review_str += reviews.get_review(rev)
+    for i in range(len(review_arr)):
+        review_str += reviews.get_review(review_arr[i])
+        c.execute("SELECT username FROM users WHERE id = ?", (str(fetch[i][0])))
+        user=c.fetchall()
+        review_str += "by user:" + user[0][0]
         review_str += "<br>"
+
+#    for rev in review_arr:
+#        review_str += reviews.get_review(rev)
+#        review_str += "<br>"
 
     return render_template("gamepage.html", game_id = game_id, game_name = game_name, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
 
