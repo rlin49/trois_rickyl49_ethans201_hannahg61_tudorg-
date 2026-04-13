@@ -38,6 +38,7 @@ def homepage():
         username = session['username']
         return render_template('homepage.html',username= username, error="")
 
+
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
     if 'username' not in session:
@@ -64,11 +65,11 @@ def gamepage(game_id):
     year = info_dict["Year"]
     genre = info_dict["Genre"]
     publisher = info_dict["Publisher"]
-    na_sales = info_dict["NA_Sales"]
-    eu_sales = info_dict["EU_Sales"]
-    jp_sales = info_dict["JP_Sales"]
-    other_sales = info_dict["Other_Sales"]
-    global_sales = info_dict["Global_Sales"]
+    na_sales = round(float(info_dict["NA_Sales"]), 2)
+    eu_sales = round(float(info_dict["EU_Sales"]), 2)
+    jp_sales = round(float(info_dict["JP_Sales"]), 2)
+    other_sales = round(float(info_dict["Other_Sales"]), 2)
+    global_sales = round(float(info_dict["Global_Sales"]), 2)
     rating = info_dict["public_rating"]
     if rating == -1:
         rating = "No Metacritic Score was Available"
