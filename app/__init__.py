@@ -38,6 +38,7 @@ def homepage():
         username = session['username']
         return render_template('homepage.html',username= username, error="")
 
+
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
     if 'username' not in session:
