@@ -1,11 +1,17 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<div class="max-w-4xl mx-auto mt-12 text-center px-4">
+
+  <h1 class="text-3xl font-bold mb-4">
+    Search for one of our many games here
+  </h1>
+</div>
 
 <html class="flex justify-center">
 
 {% if searching %}
   <div>
     <form action = "/search" method = "GET">
-    Enter Game Name: <input type = "text" name = "game_name">
+    Enter Game Name: <div class="border-1 border-solid"> <input type = "text" name = "game_name"> </div>
     <input type = "submit">
     </form>
   </div>
