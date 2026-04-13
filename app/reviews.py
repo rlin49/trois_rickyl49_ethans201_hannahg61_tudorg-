@@ -37,6 +37,8 @@ def get_review(rev_id):
 
     DBC.execute("SELECT body FROM reviews WHERE id = ?;", (rev_id, ))
     DBCF = DBC.fetchone()
+    if DBCF is None:
+        return ""
     if DBCF[0] is None:
         return ""
     DB.commit()

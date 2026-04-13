@@ -4,7 +4,7 @@
 
 <nav class="bg-gray-100 border-b">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-    
+
     <a href="/game" class="text-lg font-semibold text-gray-800">
       GAME
     </a>
@@ -17,7 +17,7 @@
       </li>
     </ul>
 
-    <a href="/logout" 
+    <a href="/logout"
        class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
        Logout
     </a>
@@ -63,7 +63,7 @@
 
   const guess_arr = "{{ guess_arr }}".split(";").map(Number);
   const ans_arr = "{{ ans_arr }}".split(";").map(Number);
-  const labels = "{{ game_arr }}".split(";");
+  const labels = "{{ game_arr | safe}}".split(";");
 
   const data = {
     labels: labels,
@@ -91,7 +91,7 @@
     type: "bar",
     data: data,
     options: {
-      indexAxis: "y",   
+      indexAxis: "y",
       responsive: true,
       scales: {
         x: {
