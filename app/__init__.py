@@ -114,7 +114,9 @@ def search():
     if "game_name" in request.args:
         db = sqlite3.connect(DB_NAME)
         c = db.cursor()
-        c.execute("SELECT * FROM games WHERE name LIKE concat('%',?,'%');", (request.args["game_name"], ))
+        search_term = request.args['game_name']
+        c.execute("SELECT * FROM games WHERE name LIKE ?", ('%' + search_term + '%',))
+
         fetch = c.fetchall()
 
         game_arr = ""
