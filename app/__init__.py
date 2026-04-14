@@ -20,29 +20,49 @@ app.secret_key = "secret_key_testing"
 
 @app.route("/")
 def main():
-    return redirect(url_for("login"))
-
-
+    return redirect(url_for("homepage"))
 
 
 @app.route("/logout")
 def logout():
     session.pop("username", None)
-    return redirect(url_for("login"))
+    return redirect(url_for("homepage"))
 
 @app.route("/homepage")
 def homepage():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        db = sqlite3.connect(DB_NAME)
+        c = db.cursor()
+        c.execute("SELECT name FROM games ORDER BY user_rating DESC LIMIT 10;")
+        fetch = c.fetchall();
+        game_ranking = "";
+        for game in fetch:
+            rating = games.get_rating(game[0])
+            if rating != -1:
+                game_ranking += f'<a href = "/gamepage/{games.get_id(game[0])}" class="text-blue-700">{game[0]}</a> - {rating}'
+                game_ranking += "<br>"
+        return render_template('homepage.html', username = "Guest", error = "", game_ranking = game_ranking)
     else:
         username = session['username']
-        return render_template('homepage.html',username= username, error="")
+
+        db = sqlite3.connect(DB_NAME)
+        c = db.cursor()
+        c.execute("SELECT name FROM games ORDER BY user_rating DESC LIMIT 10;")
+        fetch = c.fetchall();
+        game_ranking = "";
+        for game in fetch:
+            rating = games.get_rating(game[0])
+            if rating != -1:
+                game_ranking += f'<a href = "/gamepage/{games.get_id(game[0])}" class="text-blue-700">{game[0]}</a> - {rating}'
+                game_ranking += "<br>"
+
+        return render_template('homepage.html',username= username, error="", game_ranking = game_ranking)
 
 
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
-    if 'username' not in session:
-        return redirect(url_for('login'))
+    # if 'username' not in session:
+    #     return redirect(url_for('login'))
     # if "game_id" not in request.args:
     #     return redirect(url_for('search'))
 
@@ -85,9 +105,6 @@ def gamepage(game_id):
     db = sqlite3.connect(DB_NAME)
     c = db.cursor()
 
-    c.execute("SELECT user_id FROM reviews WHERE game_id= ?", (str(game_id)))
-    fetch=c.fetchall()
-    print(fetch)
 
     review_arr= games.get_reviews(game_id).split(";")
     review_str = ""
@@ -111,7 +128,7 @@ def gamepage(game_id):
 @app.route("/purge", methods = ["GET", "POST"])
 def purge():
     if 'username' not in session or session['username'] != "test":
-        return redirect(url_for('homepage'))
+        return redirect(f"/gamepage/{request.form['game_id']}")
     if 'game_id' not in request.form:
         return redirect(url_for('search'))
 
@@ -124,7 +141,7 @@ def purge():
 @app.route("/rate", methods = ["GET", "POST"])
 def rate():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(f"/gamepage/{request.form['game_id']}")
     if 'game_id' not in request.form or 'rating' not in request.form:
         return redirect(url_for('search'))
 
@@ -134,7 +151,7 @@ def rate():
 @app.route("/review", methods = ["GET", "POST"])
 def review():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        return redirect(f"/gamepage/{request.form['game_id']}")
     if 'game_id' not in request.form or 'body_text' not in request.form:
         return redirect(url_for('search'))
 
@@ -154,8 +171,8 @@ def review():
 
 @app.route("/search", methods = ["GET", "POST"])
 def search():
-    if 'username' not in session:
-        return redirect(url_for('login'))
+    # if 'username' not in session:
+    #     return redirect(url_for('homepage'))
     if "game_name" in request.args:
         db = sqlite3.connect(DB_NAME)
         c = db.cursor()
@@ -171,9 +188,9 @@ def search():
 
 @app.route("/game", methods = ["GET", "POST"])
 def game():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    else:
+    # if 'username' not in session:
+    #     return redirect(url_for('login'))
+    # else:
         json_file = open("Data/games.json", "r")
         data = json.load(json_file)
         data_keys = list(data.keys())

@@ -37,8 +37,10 @@ def get_rating(game_info):
         DBC.execute("SELECT user_rating FROM games WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 
     DBCF= DBC.fetchone()
+    if DBCF is None:
+        return -1
     if DBCF[0] is None:
-        return 0
+        return -1
     DB.commit()
     DB.close()
     return DBCF[0]
