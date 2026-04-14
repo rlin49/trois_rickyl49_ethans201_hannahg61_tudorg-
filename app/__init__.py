@@ -89,9 +89,10 @@ def gamepage(game_id):
 
     for i in range(len(review_arr)):
         review_str += reviews.get_review(review_arr[i])
-        c.execute("SELECT username FROM users IF EXISTS WHERE id = ?", (str(fetch[i][0])))
-        user=c.fetchall()
-        review_str += "by user:" + user[0][0]
+        if len(fetch) > 0:
+            c.execute("SELECT username FROM users WHERE id = ?", (str(fetch[i][0])))
+            user=c.fetchall()
+            review_str += "by user:" + user[0][0]
         review_str += "<br>"
 
 #    for rev in review_arr:
