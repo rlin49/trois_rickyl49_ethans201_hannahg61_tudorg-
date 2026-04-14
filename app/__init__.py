@@ -84,9 +84,7 @@ def gamepage(game_id):
     db = sqlite3.connect(DB_NAME)
     c = db.cursor()
 
-    c.execute("SELECT user_id FROM reviews WHERE game_id= ?", (str(game_id)))
-    fetch=c.fetchall()
-    print(fetch)
+    
 
     review_arr= games.get_reviews(game_id).split(";")
     review_str = ""
