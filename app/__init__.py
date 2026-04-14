@@ -58,7 +58,6 @@ def homepage():
 
         return render_template('homepage.html',username= username, error="", game_ranking = game_ranking)
 
-
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
     # if 'username' not in session:
@@ -89,11 +88,11 @@ def gamepage(game_id):
     year = info_dict["Year"]
     genre = info_dict["Genre"]
     publisher = info_dict["Publisher"]
-    na_sales = round(float(info_dict["NA_Sales"]), 2)
-    eu_sales = round(float(info_dict["EU_Sales"]), 2)
-    jp_sales = round(float(info_dict["JP_Sales"]), 2)
-    other_sales = round(float(info_dict["Other_Sales"]), 2)
-    global_sales = round(float(info_dict["Global_Sales"]), 2)
+    na_sales = info_dict["NA_Sales"]
+    eu_sales = info_dict["EU_Sales"]
+    jp_sales = info_dict["JP_Sales"]
+    other_sales = info_dict["Other_Sales"]
+    global_sales = info_dict["Global_Sales"]
     rating = info_dict["public_rating"]
     if rating == -1:
         rating = "No Metacritic Score was Available"
@@ -106,6 +105,7 @@ def gamepage(game_id):
     c = db.cursor()
 
 
+
     review_arr= games.get_reviews(game_id).split(";")
     review_str = ""
 
@@ -114,9 +114,9 @@ def gamepage(game_id):
             break
         review_str += reviews.get_review(review_arr[i])
         user = users.get_username(reviews.get_user(review_arr[i]))
-        # c.execute("SELECT username FROM users WHERE id = ?", (str(fetch[i][0])))
-        # user=c.fetchall()
-        review_str += " - " + user
+        if user is None:
+            user="Anonymous"
+        review_str += " - " + str(user)
         review_str += "<br>"
 
 #    for rev in review_arr:
