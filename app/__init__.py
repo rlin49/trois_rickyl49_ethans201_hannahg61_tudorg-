@@ -96,7 +96,9 @@ def gamepage(game_id):
             break
         review_str += reviews.get_review(review_arr[i])
         user = users.get_username(reviews.get_user(review_arr[i]))
-        review_str += " - " + user
+        if user is None:
+            user="Anonymous"
+        review_str += " - " + str(user)
         review_str += "<br>"
 
 #    for rev in review_arr:
