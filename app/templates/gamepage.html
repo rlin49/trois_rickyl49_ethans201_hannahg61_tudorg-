@@ -18,6 +18,8 @@ Genre: {{ genre }}
 Publisher: {{ publisher }}
 <br>
 Metacritic Score: {{ rating }}
+<br>
+User Ranking: {{ user_ranking }}
 </div> <!-- basic-info -->
 
 <div id = "description" class = "pt-1 pb-1 text-justify">
@@ -48,12 +50,24 @@ Global Sales: {{ global_sales }}
 <div id = "review-form" class = "w-[50%] pr-5 pt-2 pl-2">
 
 <form action = "/review" method = "POST">
-<textarea name = "body_text" rows = "20" cols = "100" class = "border-2 p-2"></textarea>
+<textarea name = "body_text" rows = "20" required cols = "100" class = "border-2 p-2"></textarea>
 <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
 <input type = "SUBMIT">
 </form>
+<br><br>
+<form action = "/rate" method="POST">
+  Rate this Game: <input type = "number" name="rating" min = '0' max = '100' required class="border-2"> <br>
+  <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
+  <input type = "SUBMIT">
+</form>
+<br><br>
+<form action = "/purge" method = "POST">
+  <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
+  <input type = "SUBMIT" class="text-white">
+</form>
 
 </div> <!-- review-form -->
+
 
 
 </div> <!-- fullscreen -->

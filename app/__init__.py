@@ -60,6 +60,10 @@ def gamepage(game_id):
     info_dict = data[game_name]
 
 
+    user_ranking = games.get_rating(game_id)
+    if not isinstance(user_ranking, int) or games.get_num_ratings(game_id) == 0:
+        user_ranking = "No data yet"
+
     rank = info_dict["Rank"]
     platforms = info_dict["Platform"]
     year = info_dict["Year"]
@@ -89,17 +93,43 @@ def gamepage(game_id):
     review_str = ""
 
     for i in range(len(review_arr)):
+        if len(review_arr) == 1 and review_arr[0] == "":
+            break
         review_str += reviews.get_review(review_arr[i])
-        c.execute("SELECT username FROM users WHERE id = ?", (str(fetch[i][0])))
-        user=c.fetchall()
-        review_str += "by user:" + user[0][0]
+        user = users.get_username(reviews.get_user(review_arr[i]))
+        # c.execute("SELECT username FROM users WHERE id = ?", (str(fetch[i][0])))
+        # user=c.fetchall()
+        review_str += " - " + user
         review_str += "<br>"
 
 #    for rev in review_arr:
 #        review_str += reviews.get_review(rev)
 #        review_str += "<br>"
 
-    return render_template("gamepage.html", game_id = game_id, game_name = game_name, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+    return render_template("gamepage.html", game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+
+@app.route("/purge", methods = ["GET", "POST"])
+def purge():
+    if 'username' not in session or session['username'] != "test":
+        return redirect(url_for('homepage'))
+    if 'game_id' not in request.form:
+        return redirect(url_for('search'))
+
+    game_id = int(request.form["game_id"])
+    games.purge_reviews(game_id)
+    games.purge_ratings(game_id)
+
+    return redirect(f"/gamepage/{request.form['game_id']}")
+
+@app.route("/rate", methods = ["GET", "POST"])
+def rate():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    if 'game_id' not in request.form or 'rating' not in request.form:
+        return redirect(url_for('search'))
+
+    games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
+    return redirect(f"/gamepage/{request.form['game_id']}")
 
 @app.route("/review", methods = ["GET", "POST"])
 def review():
