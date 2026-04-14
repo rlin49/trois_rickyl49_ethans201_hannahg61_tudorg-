@@ -68,7 +68,7 @@ def add_rating(rating, game_info):
     num_ratings = get_num_ratings(game_info)
     user_rating = get_rating(game_info)
     total_rating = user_rating * num_ratings
-    new_rating = (total_rating + rating)/(num_ratings + 1)
+    new_rating = int((total_rating + rating)/(num_ratings + 1))
     new_num_ratings = num_ratings + 1
 
     if isinstance(game_info, int):
@@ -85,12 +85,13 @@ def purge_ratings(game_info):
     DB = sqlite3.connect(DB_NAME)
     DBC = DB.cursor()
 
+
     if isinstance(game_info, int):
         DBC.execute("UPDATE games SET num_ratings = 0 WHERE id = ?;", (game_info + 1, ))
         DBC.execute("UPDATE games SET user_rating = 0 WHERE id = ?;", (game_info + 1, ))
     else:
         DBC.execute("UPDATE games SET num_ratings = 0 WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
-        DBC.execute("UPDATE games SET user_rating = 0 LOWER(name) LIKE LOWER(?);", (game_info, ))
+        DBC.execute("UPDATE games SET user_rating = 0 WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 
     DB.commit()
     DB.close()
