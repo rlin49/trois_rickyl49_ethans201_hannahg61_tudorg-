@@ -3,6 +3,7 @@
 <head>
   <title>Homepage</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="bg-gray-50">
 
@@ -21,10 +22,17 @@
         <a href="/search" calss="text-gray-700 hover:text-black"> search </a>
     </ul>
 
+    {% if logged_in == True %}
     <a href="/logout"
        class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
        Logout
     </a>
+    {% else %}
+    <a href="/login.html"
+       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       Log In
+    </a>
+    {% endif %}
 
   </div>
 </nav>
@@ -45,6 +53,15 @@
       </p>
     </div>
   </div>
+  <div class="bg-white shadow-md rounded-lg mx-auto mb-6 max-w-xl">
+    <div class="p-6">
+      <p class="">
+
+        Lowest Ranked Games: <br>
+          {{ bad_ranking | safe }}
+      </p>
+    </div>
+  </div>
 
 </div>
 
@@ -62,6 +79,56 @@
   </div>
 
 </div>
+
+<canvas id = "chart" class="h-[80%] w-[90%] pl-[5%] pr-[5%]"></canvas>
+
+<script>
+const ctx = document.querySelector("#chart").getContext("2d");
+
+const arr = "{{ full_ratings }}".split(";").map(Number);
+
+const ratings = [];
+
+for(let i = 0; i < arr.length; i++)
+{
+    ratings.push(arr.filter((x) => x == arr[i]).length)
+}
+const labels = "{{ full_ratings }}".split(";").map(Number);
+
+const data = {
+  labels: labels,
+  datasets: [
+    {
+      label: "Ratings",
+      data: ratings,
+      backgroundColor: "rgba(54, 162, 235, 0.5)",
+      borderColor: "rgba(54, 162, 235, 1)",
+      borderWidth: 1,
+      //grouped: false
+    }
+  ]
+};
+
+const chart = new Chart(ctx, {
+  type: "bar",
+  data: data,
+  options: {
+    indexAxis: "x",
+    responsive: true,
+    scales: {
+      x: {
+        beginAtZero: true
+      },
+      y: {
+        ticks: {
+          autoSkip: false
+        }
+      }
+    }
+  }
+});
+
+</script>
 
 <div class="text-center text-red-500 mt-4">
   {{ error }}

@@ -31,32 +31,59 @@ def logout():
 @app.route("/homepage")
 def homepage():
     if 'username' not in session:
-        db = sqlite3.connect(DB_NAME)
-        c = db.cursor()
-        c.execute("SELECT name FROM games ORDER BY user_rating DESC LIMIT 10;")
-        fetch = c.fetchall();
-        game_ranking = "";
-        for game in fetch:
-            rating = games.get_rating(game[0])
-            if rating != -1:
-                game_ranking += f'<a href = "/gamepage/{games.get_id(game[0])}" class="text-blue-700">{game[0]}</a> - {rating}'
-                game_ranking += "<br>"
-        return render_template('homepage.html', username = "Guest", error = "", game_ranking = game_ranking)
+        username = "Guest"
+        logged_in = False
     else:
         username = session['username']
+        logged_in = True
 
-        db = sqlite3.connect(DB_NAME)
-        c = db.cursor()
-        c.execute("SELECT name FROM games ORDER BY user_rating DESC LIMIT 10;")
-        fetch = c.fetchall();
-        game_ranking = "";
-        for game in fetch:
-            rating = games.get_rating(game[0])
-            if rating != -1:
-                game_ranking += f'<a href = "/gamepage/{games.get_id(game[0])}" class="text-blue-700">{game[0]}</a> - {rating}'
-                game_ranking += "<br>"
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("SELECT name FROM games ORDER BY user_rating DESC LIMIT 10;")
+    fetch = c.fetchall();
+    game_ranking = "";
+    for game in fetch:
+        rating = games.get_rating(game[0])
+        if rating != -1:
+            game_ranking += f'<a href = "/gamepage/{games.get_id(game[0])}" class="text-blue-700">{game[0]}</a> - {rating}'
+            game_ranking += "<br>"
 
-        return render_template('homepage.html',username= username, error="", game_ranking = game_ranking)
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("SELECT name FROM games WHERE NOT user_rating = -1 ORDER BY user_rating ASC LIMIT 10;")
+    fetch = c.fetchall();
+    bad_ranking = "";
+    for game in fetch:
+        rating = games.get_rating(game[0])
+        print(rating)
+        if rating != -1:
+            bad_ranking += f'<a href = "/gamepage/{games.get_id(game[0])}" class="text-blue-700">{game[0]}</a> - {rating}'
+            bad_ranking += "<br>"
+
+    c.execute("SELECT user_rating FROM games ORDER BY user_rating;")
+    fetch = c.fetchall();
+
+    full_ratings = []
+    for rate in fetch:
+
+        if rate[0] is not None and rate[0] != -1:
+            full_ratings.append(str(rate[0]))
+
+    full_ratings = ";".join(full_ratings)
+
+
+    return render_template('homepage.html',username= username, error="", game_ranking = game_ranking, bad_ranking = bad_ranking, logged_in = logged_in, full_ratings = full_ratings)
+
+@app.route("/screwuptheratingsletsago")
+def screwitup():
+    if 'username' not in session or session['username'] != "test":
+        return redirect(url_for('homepage'))
+    else:
+        for i in range(0,10):
+            for i in range(0,1000):
+                integer_fun = random.randint(0,100)
+                games.add_rating(integer_fun, i)
+        return redirect(url_for('homepage'))
 
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
@@ -124,6 +151,15 @@ def gamepage(game_id):
 #        review_str += "<br>"
 
     return render_template("gamepage.html", game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+
+@app.route("/purgeall")
+def purgeall():
+    if 'username' not in session or session['username'] != "test":
+        return redirect(url_for("homepage"))
+    for i in range(0,1000):
+        games.purge_reviews(i)
+        games.purge_ratings(i)
+    return redirect(url_for("homepage"))
 
 @app.route("/purge", methods = ["GET", "POST"])
 def purge():

@@ -89,11 +89,11 @@ def purge_ratings(game_info):
 
 
     if isinstance(game_info, int):
-        DBC.execute("UPDATE games SET num_ratings = 0 WHERE id = ?;", (game_info + 1, ))
-        DBC.execute("UPDATE games SET user_rating = 0 WHERE id = ?;", (game_info + 1, ))
+        DBC.execute("UPDATE games SET num_ratings = NULL WHERE id = ?;", (game_info + 1, ))
+        DBC.execute("UPDATE games SET user_rating = NULL WHERE id = ?;", (game_info + 1, ))
     else:
-        DBC.execute("UPDATE games SET num_ratings = 0 WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
-        DBC.execute("UPDATE games SET user_rating = 0 WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
+        DBC.execute("UPDATE games SET num_ratings = NULL WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
+        DBC.execute("UPDATE games SET user_rating = NULL WHERE LOWER(name) LIKE LOWER(?);", (game_info, ))
 
     DB.commit()
     DB.close()
