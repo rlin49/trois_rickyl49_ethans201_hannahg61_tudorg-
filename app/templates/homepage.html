@@ -10,11 +10,10 @@
 
 <nav class="bg-gray-100 border-b">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-    
+
     <a href="/game" class="text-lg font-semibold text-gray-800">
       GAME
     </a>
-
 
     <ul class="flex space-x-4">
         <a href="/homepage" class="text-gray-700 hover:text-black">
@@ -27,11 +26,17 @@
         </a>
     </ul>
 
-
-    <a href="/logout" 
+    {% if logged_in == True %}
+    <a href="/logout"
        class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
        Logout
     </a>
+    {% else %}
+    <a href="/login.html"
+       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       Log In
+    </a>
+    {% endif %}
 
   </div>
 </nav>
