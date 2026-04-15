@@ -26,3 +26,6 @@ tudorG -- 2026-04-13 20:00
 
 tudorG -- 2026-04-14 21:00
 - Adding bottom ranked games and graph showing all game rankings to homepage
+
+rickyL -- 2026-04-15 11:00
+- Adding profile to navbar and adding navbar to all pages
