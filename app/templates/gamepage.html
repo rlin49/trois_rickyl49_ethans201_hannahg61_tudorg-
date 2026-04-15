@@ -52,7 +52,7 @@ User Ranking: {{ user_ranking }}
 Description: {{ description | safe }}
 </div> <!-- description -->
 
-<div id = "sales-info" class = "pt-1">
+<div id = "sales-info" class = "pt-1 pb-1">
 NA Sales: {{ na_sales }}
 <br>
 EU Sales: {{ eu_sales }}
@@ -64,12 +64,18 @@ Other Sales: {{ other_sales }}
 Global Sales: {{ global_sales }}
 </div> <!-- sales-info -->
 
+<div id = "image" class = "pt-4 pb-1">
+<img src = {{ img_link }}></img>
+</div> <!-- image -->
+
 <div id = "reviews" class = "pt-5">
   User Reviews: <br>
   <div class = "ml-4">
     {{ reviews | safe }}
   </div>
 </div> <!-- reviews -->
+
+
 
 </div> <!-- game-info -->
 

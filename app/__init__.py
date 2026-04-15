@@ -1,5 +1,5 @@
 from flask import *
-import os, json, sqlite3, random
+import os, json, sqlite3, random, urllib
 import games, users, reviews
 
 app = Flask(__name__)
@@ -131,7 +131,37 @@ def gamepage(game_id):
     db = sqlite3.connect(DB_NAME)
     c = db.cursor()
 
+    file = open("keys/key_rawg.txt")
+    api_key = file.read().strip()
+    base_link = "https://api.rawg.io/api/games/"
+    addition = f"/screenshots?key={api_key}"
 
+    bad_chars = [":", "/", "!", "'", "&", "(", ")"]
+    parentheticalizing = False
+
+    try:
+        temp = ""
+        for i in game_name:
+            if i == " ":
+                temp += "-"
+            elif i not in bad_chars:
+                temp += i
+            elif i == "&":
+                temp += "and"
+        print(temp)
+        img_link = base_link + temp + addition
+        print(img_link)
+        img_req = urllib.request.urlopen(img_link)
+        img_json = img_req.read()
+        img_data = json.loads(img_json)
+        print(img_data)
+        if "detail" in img_data:
+            img_link = ""
+        if "results" in img_data:
+            img_link = img_data["results"][0]["image"]
+    except:
+        print("huh")
+        img_link = ""
 
     review_arr= games.get_reviews(game_id).split(";")
     review_str = ""
@@ -150,7 +180,7 @@ def gamepage(game_id):
 #        review_str += reviews.get_review(rev)
 #        review_str += "<br>"
 
-    return render_template("gamepage.html", game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+    return render_template("gamepage.html", img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
 
 @app.route("/purgeall")
 def purgeall():
@@ -269,12 +299,45 @@ def game():
 
 
 
+
         game_index = random.randint(0, len(data_keys))
         # game_index = random.randint(0,100)
         game_name = data_keys[game_index]
         info_dict = data[game_name]
-        file = open("keys/key_rawg.txt")
-        api_key = file.read().strip()
+        img_link = ""
+        # file = open("keys/key_rawg.txt")
+        # api_key = file.read().strip()
+        # base_link = "https://api.rawg.io/api/games/"
+        # addition = f"/screenshots?key={api_key}"
+        #
+        # bad_chars = [":", "/", "!", "'", "&", "(", ")"]
+        # parentheticalizing = False
+        #
+        # try:
+        #     temp = ""
+        #     for i in game_name:
+        #         if i == " ":
+        #             temp += "-"
+        #         elif i not in bad_chars:
+        #             temp += i
+        #         elif i == "&":
+        #             temp += "and"
+        #     print(temp)
+        #     img_link = base_link + temp + addition
+        #     print(img_link)
+        #     img_req = urllib.request.urlopen(img_link)
+        #     img_json = img_req.read()
+        #     img_data = json.loads(img_json)
+        #     print(img_data)
+        #     if "detail" in img_data:
+        #         img_link = ""
+        #     if "results" in img_data:
+        #         img_link = img_data["results"][0]["image"]
+        # except:
+        #     print("huh")
+        #     img_link = ""
+
+
 
         sales_rank = info_dict["Rank"]
         platforms = info_dict["Platform"]
@@ -290,7 +353,7 @@ def game():
         description = description.replace("</p>", "")
 
 
-        return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description)
+        return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description, img_link = img_link)
 
 @app.route("/profile/<username>")
 def profile(username):
