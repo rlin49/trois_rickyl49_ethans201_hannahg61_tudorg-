@@ -19,7 +19,12 @@
         <a href="/homepage" class="text-gray-700 hover:text-black">
           Home
         </a>
-        <a href="/search" calss="text-gray-700 hover:text-black"> search </a>
+        <a href="/search" calss="text-gray-700 hover:text-black"> Search </a>
+        {% if logged_in == True %}
+        <a href="/profile/{{username}}" class="text-gray-700 hover:text-black">
+          Profile
+        </a>
+        {% endif %}
     </ul>
 
     {% if logged_in == True %}
