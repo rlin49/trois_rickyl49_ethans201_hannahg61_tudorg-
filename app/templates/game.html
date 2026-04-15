@@ -4,7 +4,7 @@
 
 <nav class="bg-gray-100 border-b">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-    
+
     <a href="/game" class="text-lg font-semibold text-gray-800">
       GAME
     </a>
@@ -22,14 +22,17 @@
     </ul>
 
 
-    <a href="/logout" 
+    <a href="/logout"
        class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
        Logout
     </a>
 
   </div>
 </nav>
-<div class="w-[50%] p-5">
+
+<div name = "game" class = "pl-[25%] pr-[25%]">
+
+<div class="w-full p-5">
   <canvas id="chart"></canvas>
 </div>
 
@@ -62,6 +65,8 @@
 
   <input type="submit" class="border-2 p-1">
 </form>
+
+</div>
 
 <script>
   const ctx = document.querySelector("#chart").getContext("2d");
