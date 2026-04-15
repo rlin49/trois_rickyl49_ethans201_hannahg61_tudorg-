@@ -21,6 +21,7 @@
         </a>
         <a href="/search" calss="text-gray-700 hover:text-black"> Search </a>
         {% if logged_in == True %}
+        <li class="nav-item"><a class="nav-link" href="/profile/{{username}}">Profile</a></li>
         <a href="/profile/{{username}}" class="text-gray-700 hover:text-black">
           Profile
         </a>
