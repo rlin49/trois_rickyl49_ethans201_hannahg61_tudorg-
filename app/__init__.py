@@ -267,7 +267,8 @@ def game():
         # game_index = random.randint(0,100)
         game_name = data_keys[game_index]
         info_dict = data[game_name]
-
+        file = open("keys/key_rawg.txt")
+        api_key = file.read().strip()
 
         sales_rank = info_dict["Rank"]
         platforms = info_dict["Platform"]

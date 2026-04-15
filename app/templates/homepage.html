@@ -88,18 +88,22 @@ const ctx = document.querySelector("#chart").getContext("2d");
 const arr = "{{ full_ratings }}".split(";").map(Number);
 
 const ratings = [];
+const labels = [];
 
-for(let i = 0; i < arr.length; i++)
+for(let i = 0; i < 100; i++)
 {
-    ratings.push(arr.filter((x) => x == arr[i]).length)
+    labels.push(i);
+    ratings.push(arr.filter((x) => x == i).length)
 }
-const labels = "{{ full_ratings }}".split(";").map(Number);
+
+
+
 
 const data = {
   labels: labels,
   datasets: [
     {
-      label: "Ratings",
+      label: "Number of Ratings",
       data: ratings,
       backgroundColor: "rgba(54, 162, 235, 0.5)",
       borderColor: "rgba(54, 162, 235, 1)",
@@ -117,6 +121,7 @@ const chart = new Chart(ctx, {
     responsive: true,
     scales: {
       x: {
+        // stacked: true
         beginAtZero: true
       },
       y: {
