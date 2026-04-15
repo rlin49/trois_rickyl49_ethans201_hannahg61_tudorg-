@@ -19,11 +19,12 @@
         <a href="/homepage" class="text-gray-700 hover:text-black">
           Home
         </a>
-    </ul>
-    <ul class="flex space-x-4">
-        <a href="/search" class="text-gray-700 hover:text-black">
-          Search
+        <a href="/search" calss="text-gray-700 hover:text-black"> Search </a>
+        {% if logged_in == True %}
+        <a href="/profile/{{username}}" class="text-gray-700 hover:text-black">
+          Profile
         </a>
+        {% endif %}
     </ul>
 
     {% if logged_in == True %}
@@ -92,22 +93,18 @@ const ctx = document.querySelector("#chart").getContext("2d");
 const arr = "{{ full_ratings }}".split(";").map(Number);
 
 const ratings = [];
-const labels = [];
 
-for(let i = 0; i < 100; i++)
+for(let i = 0; i < arr.length; i++)
 {
-    labels.push(i);
-    ratings.push(arr.filter((x) => x == i).length)
+    ratings.push(arr.filter((x) => x == arr[i]).length)
 }
-
-
-
+const labels = "{{ full_ratings }}".split(";").map(Number);
 
 const data = {
   labels: labels,
   datasets: [
     {
-      label: "Number of Ratings",
+      label: "Ratings",
       data: ratings,
       backgroundColor: "rgba(54, 162, 235, 0.5)",
       borderColor: "rgba(54, 162, 235, 1)",
@@ -125,7 +122,6 @@ const chart = new Chart(ctx, {
     responsive: true,
     scales: {
       x: {
-        // stacked: true
         beginAtZero: true
       },
       y: {

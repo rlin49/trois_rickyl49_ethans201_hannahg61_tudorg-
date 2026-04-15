@@ -177,11 +177,17 @@ def purge():
 @app.route("/rate", methods = ["GET", "POST"])
 def rate():
     if 'username' not in session:
-        return redirect(f"/gamepage/{request.form['game_id']}")
+        return redirect(url_for('login'))
     if 'game_id' not in request.form or 'rating' not in request.form:
         return redirect(url_for('search'))
-
-    games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
+    if 'rated_games' not in session:
+        session['rated_games']=[]
+    game=int(request.form['game_id'])
+    if game not in session['rated_games']:
+        session['rated_games'].append(game)
+        games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
+    else:
+        print("already rated")
     return redirect(f"/gamepage/{request.form['game_id']}")
 
 @app.route("/review", methods = ["GET", "POST"])
@@ -368,6 +374,9 @@ def register():
     db.close()
 
     session['username'] = username
+    if 'rated_games' not in session:
+        session['rated_games']=[]
+    session.permanent=True
     return redirect(url_for("homepage"))
 
   return render_template("register.html")
