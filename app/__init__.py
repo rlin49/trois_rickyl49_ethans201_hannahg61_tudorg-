@@ -218,6 +218,7 @@ def rate():
         games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
     else:
         print("already rated")
+        flash("You have already rated this game.", "error")
     return redirect(f"/gamepage/{request.form['game_id']}")
 
 @app.route("/review", methods = ["GET", "POST"])
