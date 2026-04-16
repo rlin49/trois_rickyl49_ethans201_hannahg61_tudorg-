@@ -32,3 +32,10 @@ rickyL -- 2026-04-15 11:00
 
 tudorG -- 2026-04-15 19:00
 - Testing API for game screenshots to determine where and if they should be used
+
+HOME STRETCH CHECKLIST:
+------------------------------------
+* Flesh out the frontend pages more :: Ricky, Hannah, Ethan
+* Devoloping graphs:: Hannah, Tudor 
+* Linking profile :: Ricky
+====================================
