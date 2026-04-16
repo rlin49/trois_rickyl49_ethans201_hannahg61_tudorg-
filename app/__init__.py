@@ -217,7 +217,6 @@ def rate():
         session['rated_games'].append(game)
         games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
     else:
-        print("already rated")
         flash("You have already rated this game.", "error")
     return redirect(f"/gamepage/{request.form['game_id']}")
 
@@ -361,13 +360,20 @@ def profile(username):
     if 'username' not in session:
         return redirect(url_for('login'))
     user=session['username']
-    print(user)
     if username != session['username']:
         is_own_profile=False
     else:
         is_own_profile=True
-    print(is_own_profile)
+    if username is None:
+        return(redirect(url_for("profile", username=session['username'])))
     return render_template("profile.html",username=user, is_own_profile=is_own_profile)
+
+@app.route("/profile")
+@app.route("/profile/")
+def profilez():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return(redirect(url_for("profile", username=session['username'])))
 
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
