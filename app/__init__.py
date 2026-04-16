@@ -87,6 +87,12 @@ def screwitup():
 
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
+    if 'username' not in session:
+        username = "Guest"
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # if "game_id" not in request.args:
@@ -184,7 +190,7 @@ def gamepage(game_id):
 #        review_str += reviews.get_review(rev)
 #        review_str += "<br>"
 
-    return render_template("gamepage.html", img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description,logged_in=logged_in)
+    return render_template("gamepage.html", username = username, logged_in = logged_in, img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
 
 @app.route("/purgeall")
 def purgeall():
@@ -221,8 +227,7 @@ def rate():
         session['rated_games'].append(game)
         games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
     else:
-        print("already rated")
-    flash("You have already rated this game.", "error")
+        flash("You have already rated this game.", "error")
     return redirect(f"/gamepage/{request.form['game_id']}")
 
 @app.route("/review", methods = ["GET", "POST"])
@@ -241,13 +246,19 @@ def review():
             temp += i
 
     body_text = temp
-    user_id = users.get_id(session["username"])
+    user_id = int(users.get_id(session["username"]))
 
     reviews.make_review(body_text, user_id, game_id)
     return redirect(f"/gamepage/{game_id}")
 
 @app.route("/search", methods = ["GET", "POST"])
 def search():
+    if 'username' not in session:
+        username = "Guest"
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('homepage'))
     if 'username' not in session:
@@ -264,12 +275,18 @@ def search():
         game_arr = ""
         for game in fetch:
             game_arr += f"<a href = '/gamepage/{game[4] - 1}'>{game[0]}</a><br>"
-        return render_template("search.html", games = game_arr,logged_in=logged_in)
+        return render_template("search.html", username = username, logged_in = logged_in, games = game_arr)
     else:
-        return render_template("search.html", searching = True,logged_in=logged_in)
+        return render_template("search.html", username = username, logged_in = logged_in, searching = True)
 
 @app.route("/game", methods = ["GET", "POST"])
 def game():
+    if 'username' not in session:
+        username = "Guest"
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # else:
@@ -368,20 +385,27 @@ def game():
         description = description.replace("</p>", "")
 
 
-        return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, logged_in=logged_in, rating = public_rating, description = description, img_link = img_link)
+        return render_template('game.html',username = username, logged_in = logged_in, guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description, img_link = img_link)
 
 @app.route("/profile/<username>")
 def profile(username):
     if 'username' not in session:
         return redirect(url_for('login'))
     user=session['username']
-    print(user)
     if username != session['username']:
         is_own_profile=False
     else:
         is_own_profile=True
-    print(is_own_profile)
+    if username is None:
+        return(redirect(url_for("profile", username=session['username'])))
     return render_template("profile.html",username=user, is_own_profile=is_own_profile)
+
+@app.route("/profile")
+@app.route("/profile/")
+def profilez():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return(redirect(url_for("profile", username=session['username'])))
 
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")

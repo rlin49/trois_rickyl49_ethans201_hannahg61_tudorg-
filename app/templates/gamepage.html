@@ -19,6 +19,12 @@
     </ul>
 
     {% if logged_in == True %}
+    <ul class="flex space-x-4">
+        <a href="/profile/{{ username }}" class="text-gray-700 hover:text-black">
+          Profile
+        </a>
+    </ul>
+
     <a href="/logout"
        class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
        Logout
@@ -29,7 +35,6 @@
        Log In
     </a>
     {% endif %}
-
   </div>
 </nav>
 
@@ -96,7 +101,7 @@ Global Sales: {{ global_sales }}
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</div>
+      <div class="alert">{{ message }}</div>
     {% endfor %}
   {% endif %}
 {% endwith %}
