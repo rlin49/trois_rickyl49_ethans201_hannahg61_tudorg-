@@ -1,5 +1,39 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
+<nav class="bg-gray-100 border-b">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+
+    <a href="/game" class="text-lg font-semibold text-gray-800">
+      GAME
+    </a>
+
+    <ul class="flex space-x-4">
+        <a href="/homepage" class="text-gray-700 hover:text-black">
+          Home
+        </a>
+    </ul>
+    <ul class="flex space-x-4">
+        <a href="/search" class="text-gray-700 hover:text-black">
+          Search
+        </a>
+    </ul>
+
+    {% if logged_in == True %}
+    <a href="/logout"
+       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       Logout
+    </a>
+    {% else %}
+    <a href="/login.html"
+       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       Log In
+    </a>
+    {% endif %}
+
+  </div>
+</nav>
+
+
 <div id = "fullscreen" class = "flex">
 
 <div id = "game-info" class = "pl-5 pt-2 w-[50%] pr-2">
@@ -62,7 +96,7 @@ Global Sales: {{ global_sales }}
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
-      <div class="alert alert-{{ category }}">{{ message }}</div>
+      <div class="alert">{{ message }}</div>
     {% endfor %}
   {% endif %}
 {% endwith %}
