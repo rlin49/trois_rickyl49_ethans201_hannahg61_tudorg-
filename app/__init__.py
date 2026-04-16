@@ -87,6 +87,12 @@ def screwitup():
 
 @app.route("/gamepage/<game_id>", methods = ["GET", "POST"])
 def gamepage(game_id):
+    if 'username' not in session:
+        username = "Guest"
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # if "game_id" not in request.args:
@@ -180,7 +186,7 @@ def gamepage(game_id):
 #        review_str += reviews.get_review(rev)
 #        review_str += "<br>"
 
-    return render_template("gamepage.html", img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+    return render_template("gamepage.html", username = username, logged_in = logged_in, img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
 
 @app.route("/purgeall")
 def purgeall():
@@ -243,6 +249,12 @@ def review():
 
 @app.route("/search", methods = ["GET", "POST"])
 def search():
+    if 'username' not in session:
+        username = "Guest"
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('homepage'))
     if "game_name" in request.args:
@@ -254,15 +266,22 @@ def search():
         game_arr = ""
         for game in fetch:
             game_arr += f"<a href = '/gamepage/{game[4] - 1}'>{game[0]}</a><br>"
-        return render_template("search.html", games = game_arr)
+        return render_template("search.html", username = username, logged_in = logged_in, games = game_arr)
     else:
-        return render_template("search.html", searching = True)
+        return render_template("search.html", username = username, logged_in = logged_in, searching = True)
 
 @app.route("/game", methods = ["GET", "POST"])
 def game():
+    if 'username' not in session:
+        username = "Guest"
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # else:
+
         json_file = open("Data/games.json", "r")
         data = json.load(json_file)
         data_keys = list(data.keys())
@@ -353,7 +372,7 @@ def game():
         description = description.replace("</p>", "")
 
 
-        return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description, img_link = img_link)
+        return render_template('game.html',username = username, logged_in = logged_in, guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description, img_link = img_link)
 
 @app.route("/profile/<username>")
 def profile(username):
