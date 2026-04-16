@@ -91,7 +91,11 @@ def gamepage(game_id):
     #     return redirect(url_for('login'))
     # if "game_id" not in request.args:
     #     return redirect(url_for('search'))
-
+    if 'username' not in session:
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     json_file = open("Data/games.json", "r")
     data = json.load(json_file)
     data_keys = list(data.keys())
@@ -180,7 +184,7 @@ def gamepage(game_id):
 #        review_str += reviews.get_review(rev)
 #        review_str += "<br>"
 
-    return render_template("gamepage.html", img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+    return render_template("gamepage.html", img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description,logged_in=logged_in)
 
 @app.route("/purgeall")
 def purgeall():
@@ -218,7 +222,7 @@ def rate():
         games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
     else:
         print("already rated")
-        flash("You have already rated this game.", "error")
+    flash("You have already rated this game.", "error")
     return redirect(f"/gamepage/{request.form['game_id']}")
 
 @app.route("/review", methods = ["GET", "POST"])
@@ -246,6 +250,11 @@ def review():
 def search():
     # if 'username' not in session:
     #     return redirect(url_for('homepage'))
+    if 'username' not in session:
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     if "game_name" in request.args:
         db = sqlite3.connect(DB_NAME)
         c = db.cursor()
@@ -255,15 +264,20 @@ def search():
         game_arr = ""
         for game in fetch:
             game_arr += f"<a href = '/gamepage/{game[4] - 1}'>{game[0]}</a><br>"
-        return render_template("search.html", games = game_arr)
+        return render_template("search.html", games = game_arr,logged_in=logged_in)
     else:
-        return render_template("search.html", searching = True)
+        return render_template("search.html", searching = True,logged_in=logged_in)
 
 @app.route("/game", methods = ["GET", "POST"])
 def game():
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # else:
+        if 'username' not in session:
+            logged_in = False
+        else:
+            username = session['username']
+            logged_in = True
         json_file = open("Data/games.json", "r")
         data = json.load(json_file)
         data_keys = list(data.keys())
@@ -354,7 +368,7 @@ def game():
         description = description.replace("</p>", "")
 
 
-        return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description, img_link = img_link)
+        return render_template('game.html', guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, logged_in=logged_in, rating = public_rating, description = description, img_link = img_link)
 
 @app.route("/profile/<username>")
 def profile(username):
