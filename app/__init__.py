@@ -97,7 +97,11 @@ def gamepage(game_id):
     #     return redirect(url_for('login'))
     # if "game_id" not in request.args:
     #     return redirect(url_for('search'))
-
+    if 'username' not in session:
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     json_file = open("Data/games.json", "r")
     data = json.load(json_file)
     data_keys = list(data.keys())
@@ -223,7 +227,7 @@ def rate():
         session['rated_games'].append(game)
         games.add_rating(int(request.form['rating']), int(request.form["game_id"]))
     else:
-        print("already rated")
+        flash("You have already rated this game.", "error")
     return redirect(f"/gamepage/{request.form['game_id']}")
 
 @app.route("/review", methods = ["GET", "POST"])
@@ -242,7 +246,7 @@ def review():
             temp += i
 
     body_text = temp
-    user_id = users.get_id(session["username"])
+    user_id = int(users.get_id(session["username"]))
 
     reviews.make_review(body_text, user_id, game_id)
     return redirect(f"/gamepage/{game_id}")
@@ -257,6 +261,11 @@ def search():
         logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('homepage'))
+    if 'username' not in session:
+        logged_in = False
+    else:
+        username = session['username']
+        logged_in = True
     if "game_name" in request.args:
         db = sqlite3.connect(DB_NAME)
         c = db.cursor()
@@ -281,7 +290,11 @@ def game():
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # else:
-
+        if 'username' not in session:
+            logged_in = False
+        else:
+            username = session['username']
+            logged_in = True
         json_file = open("Data/games.json", "r")
         data = json.load(json_file)
         data_keys = list(data.keys())
@@ -379,13 +392,20 @@ def profile(username):
     if 'username' not in session:
         return redirect(url_for('login'))
     user=session['username']
-    print(user)
     if username != session['username']:
         is_own_profile=False
     else:
         is_own_profile=True
-    print(is_own_profile)
+    if username is None:
+        return(redirect(url_for("profile", username=session['username'])))
     return render_template("profile.html",username=user, is_own_profile=is_own_profile)
+
+@app.route("/profile")
+@app.route("/profile/")
+def profilez():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    return(redirect(url_for("profile", username=session['username'])))
 
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")

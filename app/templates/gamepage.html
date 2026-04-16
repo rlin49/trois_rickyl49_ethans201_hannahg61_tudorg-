@@ -1,11 +1,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
 <nav class="bg-gray-100 border-b">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
     <a href="/game" class="text-lg font-semibold text-gray-800">
       GAME
     </a>
-
 
     <ul class="flex space-x-4">
         <a href="/homepage" class="text-gray-700 hover:text-black">
@@ -29,12 +29,19 @@
        class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
        Logout
     </a>
+    {% else %}
+    <a href="/login.html"
+       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       Log In
+    </a>
     {% endif %}
   </div>
 </nav>
-<div id = "fullscreen" class = "flex w-full">
 
-<div id = "game-info" class = "pl-5 pt-2 w-[45%] pr-2">
+
+<div id = "fullscreen" class = "flex">
+
+<div id = "game-info" class = "pl-5 pt-2 w-[50%] pr-2">
 
 <div id = "name-rank" class = "pb-1">
 <b>{{ game_name }}</b> #{{ rank }}
@@ -58,7 +65,7 @@ User Ranking: {{ user_ranking }}
 Description: {{ description | safe }}
 </div> <!-- description -->
 
-<div id = "sales-info" class = "pt-1 pb-1">
+<div id = "sales-info" class = "pt-1">
 NA Sales: {{ na_sales }}
 <br>
 EU Sales: {{ eu_sales }}
@@ -70,10 +77,6 @@ Other Sales: {{ other_sales }}
 Global Sales: {{ global_sales }}
 </div> <!-- sales-info -->
 
-<div id = "image" class = "pt-4 pb-1">
-<img src = {{ img_link }}></img>
-</div> <!-- image -->
-
 <div id = "reviews" class = "pt-5">
   User Reviews: <br>
   <div class = "ml-4">
@@ -81,11 +84,9 @@ Global Sales: {{ global_sales }}
   </div>
 </div> <!-- reviews -->
 
-
-
 </div> <!-- game-info -->
 
-<div id = "review-form" class = "w-[45%] pr-5 pt-2 pl-2">
+<div id = "review-form" class = "w-[50%] pr-5 pt-2 pl-2">
 
 <form action = "/review" method = "POST">
 <textarea name = "body_text" rows = "20" required cols = "100" class = "border-2 p-2"></textarea>
@@ -97,6 +98,14 @@ Global Sales: {{ global_sales }}
   Rate this Game: <input type = "number" name="rating" min = '0' max = '100' required class="border-2"> <br>
   <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
   <input type = "SUBMIT">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 </form>
 <br><br>
 <form action = "/purge" method = "POST">
