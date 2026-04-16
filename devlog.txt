@@ -39,3 +39,6 @@ HOME STRETCH CHECKLIST:
 * Devoloping graphs:: Hannah, Tudor 
 * Linking profile :: Ricky
 ====================================
+
+rickyL -- 2026-04-16 11:00
+- Finished adding profile to navbar through edits of the flask app and html files
