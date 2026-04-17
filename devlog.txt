@@ -40,5 +40,9 @@ HOME STRETCH CHECKLIST:
 * Linking profile :: Ricky
 ====================================
 
+tudorG -- 2026-04-16 10:00
+- Fixing minor issues with game pages and creating reviews
+- Making sure database doesn't/can't fail while site is in use
+- Note: could not work at home due to temporary internet issues
 rickyL -- 2026-04-16 11:00
 - Finished adding profile to navbar through edits of the flask app and html files
