@@ -281,20 +281,17 @@ def search():
 
 @app.route("/game", methods = ["GET", "POST"])
 def game():
-    if 'username' not in session:
-        username = "Guest"
-        logged_in = False
-    else:
-        username = session['username']
-        logged_in = True
+
     # if 'username' not in session:
     #     return redirect(url_for('login'))
     # else:
         if 'username' not in session:
+            username = "Guest"
             logged_in = False
         else:
             username = session['username']
             logged_in = True
+
         json_file = open("Data/games.json", "r")
         data = json.load(json_file)
         data_keys = list(data.keys())
@@ -384,7 +381,7 @@ def game():
         description = description.replace("<p>", "")
         description = description.replace("</p>", "")
 
-
+        print("huh")
         return render_template('game.html',username = username, logged_in = logged_in, guess_arr = guessed_amt, ans_arr = real_amt, game_arr = game_arr, game_name = game_name, game_index = game_index, rank = sales_rank, platform = platforms, year = year, genre = genre, publisher = publisher, rating = public_rating, description = description, img_link = img_link)
 
 @app.route("/profile/<username>")

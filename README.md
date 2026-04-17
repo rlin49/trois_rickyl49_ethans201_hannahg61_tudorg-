@@ -1,5 +1,7 @@
 # Accro aux Jeux Vidéo by Trois
 
+# NOTE: BECAUSE OUR DATA FILE IS BOTH SMALL AND PROPRIETARY WE HAVE CHOSEN TO KEEP IT IN THE REPO INSTEAD OF MAKING USERS REDOWNLOAD THE ORIGINAL CSV AND THEN RUN THE PROGRAM TO CONVERT THAT INTO A JSON FILE
+
 Ricky (PM): Database functions, frontend
 
 Ethan: User handling (creating profiles, making reviews, etc)
@@ -9,9 +11,11 @@ Hannah: Frontend, graphs
 Tudor: Database sanitation, APIs, backend
 
 # description
-Users are given game information and have to guess total sales, which updates a graph showing their guesses vs actual sales, growing each round. On their own profile, users can rank their favorite games while also seeing their accuracy in games. Users will be able to view other players profiles, while also seeing the top players and top rated games. 
+Users are given game information and have to guess total sales, which updates a graph showing their guesses vs actual sales, growing each round. On their own profile, users can rank their favorite games while also seeing their accuracy in games. Users will be able to view other players profiles, while also seeing the top players and top rated games.
 
 #### Visit our live site at [167.71.85.43](http://167.71.85.43)
+
+
 
 # Install Guide:
 

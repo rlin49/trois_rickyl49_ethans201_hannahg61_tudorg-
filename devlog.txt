@@ -36,13 +36,16 @@ tudorG -- 2026-04-15 19:00
 HOME STRETCH CHECKLIST:
 ------------------------------------
 * Flesh out the frontend pages more :: Ricky, Hannah, Ethan
-* Devoloping graphs:: Hannah, Tudor 
+* Devoloping graphs:: Hannah, Tudor
 * Linking profile :: Ricky
 ====================================
 
 tudorG -- 2026-04-16 10:00
 - Fixing minor issues with game pages and creating reviews
 - Making sure database doesn't/can't fail while site is in use
-- Note: could not work at home due to temporary internet issues
+- Fixing issues with game breaking while logged out
+- More checking for issues to make sure things don't fail
+- Note: For the profile page to have any merit the database must change
+
 rickyL -- 2026-04-16 11:00
 - Finished adding profile to navbar through edits of the flask app and html files
