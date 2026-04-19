@@ -3,7 +3,7 @@
 
 <body class="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937,_#030712)] text-gray-100">
 
-<nav class="bg-red-600 border-b border-red-800">
+<nav class="bg-red-700 border-b border-red-900">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
     <a href="/game" class="text-lg font-semibold text-gray-50">
@@ -43,11 +43,13 @@
 
 <div name="game" class="pl-[25%] pr-[25%] mt-10">
 
-<div class="w-full p-5 bg-red-600 text-gray-50 border border-gray-700 rounded-xl shadow-2xl">
+<!-- CHART -->
+<div class="w-full p-5 bg-gray-900 text-gray-100 border border-gray-700 rounded-xl shadow-2xl">
   <canvas id="chart"></canvas>
 </div>
 
-<div class="w-full pl-5 pr-5 mt-6 bg-red-600 text-gray-50 border border-gray-700 rounded-xl shadow-2xl p-5">
+<!-- GAME INFO -->
+<div class="w-full pl-5 pr-5 mt-6 bg-gray-800 text-gray-100 border border-gray-700 rounded-xl shadow-2xl p-5">
   <br>
   <b>{{ game_name }}</b> #{{ rank }}
   <br>
@@ -67,7 +69,8 @@
   <img src={{ img_link }} class="rounded-lg border border-gray-700">
 </div>
 
-<form action="/game" method="POST" class="pl-5 mt-6 bg-red-600 text-gray-50 border border-gray-700 rounded-xl shadow-2xl p-5">
+<!-- FORM -->
+<form action="/game" method="POST" class="pl-5 mt-6 bg-gray-900 text-gray-100 border border-gray-700 rounded-xl shadow-2xl p-5">
   How many units do you think this game sold? (in millions)
 
   <input class="border border-gray-600 bg-gray-800 text-gray-100 p-1 rounded ml-2"
@@ -78,7 +81,7 @@
   <input type="hidden" name="ans_arr" value="{{ ans_arr }}">
   <input type="hidden" name="game_arr" value='{{ game_arr }}'>
 
-  <input type="submit" class="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600 ml-2 cursor-pointer">
+  <input type="submit" class="bg-red-600 px-3 py-1 rounded hover:bg-red-700 ml-2 cursor-pointer">
 </form>
 
 </div>
@@ -96,15 +99,15 @@
       {
         label: "Guesses",
         data: guess_arr,
-        backgroundColor: "rgba(54, 162, 235, 0.6)",
-        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(59, 130, 246, 0.6)",
+        borderColor: "rgba(59, 130, 246, 1)",
         borderWidth: 1
       },
       {
         label: "Real Answers",
         data: ans_arr,
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(239, 68, 68, 0.6)",
+        borderColor: "rgba(239, 68, 68, 1)",
         borderWidth: 1
       }
     ]
