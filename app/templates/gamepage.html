@@ -1,53 +1,54 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-<nav class="bg-gray-100 border-b">
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937,_#030712)] text-gray-100">
+
+<nav class="bg-red-700 border-b border-red-900">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
-    <a href="/game" class="text-lg font-semibold text-gray-800">
+    <a href="/game" class="text-lg font-semibold text-gray-50">
       GAME
     </a>
 
     <ul class="flex space-x-4">
-        <a href="/homepage" class="text-gray-700 hover:text-black">
+        <a href="/homepage" class="text-gray-50 hover:text-black">
           Home
         </a>
     </ul>
     <ul class="flex space-x-4">
-        <a href="/search" class="text-gray-700 hover:text-black">
+        <a href="/search" class="text-gray-50 hover:text-black">
           Search
         </a>
     </ul>
 
     {% if logged_in == True %}
     <ul class="flex space-x-4">
-        <a href="/profile/{{ username }}" class="text-gray-700 hover:text-black">
+        <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">
           Profile
         </a>
     </ul>
 
     <a href="/logout"
-       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Logout
     </a>
     {% else %}
     <a href="/login.html"
-       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Log In
     </a>
     {% endif %}
   </div>
 </nav>
 
+<div id="fullscreen" class="flex mt-6">
 
-<div id = "fullscreen" class = "flex">
+<div id="game-info" class="pl-5 pt-2 w-[50%] pr-2 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl ml-4 mr-2 p-4">
 
-<div id = "game-info" class = "pl-5 pt-2 w-[50%] pr-2">
-
-<div id = "name-rank" class = "pb-1">
+<div id="name-rank" class="pb-2 text-lg">
 <b>{{ game_name }}</b> #{{ rank }}
-</div> <!-- name-rank -->
+</div>
 
-<div id = "basic-info" class = "pt-1 pb-1">
+<div id="basic-info" class="pt-1 pb-2">
 Platform(s): {{ platforms }}
 <br>
 Year: {{ year }}
@@ -59,13 +60,13 @@ Publisher: {{ publisher }}
 Metacritic Score: {{ rating }}
 <br>
 User Ranking: {{ user_ranking }}
-</div> <!-- basic-info -->
+</div>
 
-<div id = "description" class = "pt-1 pb-1 text-justify">
+<div id="description" class="pt-1 pb-2 text-justify">
 Description: {{ description | safe }}
-</div> <!-- description -->
+</div>
 
-<div id = "sales-info" class = "pt-1">
+<div id="sales-info" class="pt-1">
 NA Sales: {{ na_sales }}
 <br>
 EU Sales: {{ eu_sales }}
@@ -75,46 +76,54 @@ JP Sales: {{ jp_sales }}
 Other Sales: {{ other_sales }}
 <br>
 Global Sales: {{ global_sales }}
-</div> <!-- sales-info -->
+</div>
 
-<div id = "reviews" class = "pt-5">
+<div id="reviews" class="pt-5">
   User Reviews: <br>
-  <div class = "ml-4">
+  <div class="ml-4">
     {{ reviews | safe }}
   </div>
-</div> <!-- reviews -->
+</div>
 
-</div> <!-- game-info -->
+</div>
 
-<div id = "review-form" class = "w-[50%] pr-5 pt-2 pl-2">
+<div id="review-form" class="w-[50%] pr-5 pt-2 pl-2 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl mr-4 ml-2 p-4">
 
-<form action = "/review" method = "POST">
-<textarea name = "body_text" rows = "20" required cols = "100" class = "border-2 p-2"></textarea>
-<input type = "hidden" name = "game_id" value = '{{ game_id }}'>
-<input type = "SUBMIT">
+<form action="/review" method="POST">
+<textarea name="body_text" rows="20" required cols="100"
+          class="border border-gray-600 bg-gray-900 text-gray-100 p-2 rounded w-full"></textarea>
+<input type="hidden" name="game_id" value='{{ game_id }}'>
+<input type="submit" class="bg-red-600 px-3 py-1 rounded mt-2 hover:bg-red-700 cursor-pointer">
 </form>
+
 <br><br>
-<form action = "/rate" method="POST">
-  Rate this Game: <input type = "number" name="rating" min = '0' max = '100' required class="border-2"> <br>
-  <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
-  <input type = "SUBMIT">
+
+<form action="/rate" method="POST">
+  Rate this Game: 
+  <input type="number" name="rating" min='0' max='100' required 
+         class="border border-gray-600 bg-gray-900 text-gray-100 p-1 rounded">
+  <br>
+
+  <input type="hidden" name="game_id" value='{{ game_id }}'>
+  <input type="submit" class="bg-red-600 px-3 py-1 rounded mt-2 hover:bg-red-700 cursor-pointer">
+
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
     {% for category, message in messages %}
-      <div class="alert">{{ message }}</div>
+      <div class="mt-2 text-sm text-red-300">{{ message }}</div>
     {% endfor %}
   {% endif %}
-{% endwith %}
+  {% endwith %}
 
 </form>
+
 <br><br>
-<form action = "/purge" method = "POST">
-  <input type = "hidden" name = "game_id" value = '{{ game_id }}'>
-  <input type = "SUBMIT" class="text-white">
+
+<form action="/purge" method="POST">
+  <input type="hidden" name="game_id" value='{{ game_id }}'>
+  <input type="submit" class="bg-red-800 text-white px-3 py-1 rounded hover:bg-red-900 cursor-pointer">
 </form>
 
-</div> <!-- review-form -->
+</div>
 
-
-
-</div> <!-- fullscreen -->
+</div>
