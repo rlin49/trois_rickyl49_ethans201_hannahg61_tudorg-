@@ -1,53 +1,53 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937,_#030712)] text-gray-100">
 
-<nav class="bg-gray-100 border-b">
+<nav class="bg-red-600 border-b border-red-800">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
-    <a href="/game" class="text-lg font-semibold text-gray-800">
+    <a href="/game" class="text-lg font-semibold text-gray-50">
       GAME
     </a>
 
-
     <ul class="flex space-x-4">
-        <a href="/homepage" class="text-gray-700 hover:text-black">
+        <a href="/homepage" class="text-gray-50 hover:text-black">
           Home
         </a>
     </ul>
     <ul class="flex space-x-4">
-        <a href="/search" class="text-gray-700 hover:text-black">
+        <a href="/search" class="text-gray-50 hover:text-black">
           Search
         </a>
     </ul>
 
     {% if logged_in == True %}
     <ul class="flex space-x-4">
-        <a href="/profile/{{ username }}" class="text-gray-700 hover:text-black">
+        <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">
           Profile
         </a>
     </ul>
 
     <a href="/logout"
-       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Logout
     </a>
     {% else %}
     <a href="/login.html"
-       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Log In
     </a>
     {% endif %}
   </div>
 </nav>
 
-<div name = "game" class = "pl-[25%] pr-[25%]">
+<div name="game" class="pl-[25%] pr-[25%] mt-10">
 
-<div class="w-full p-5">
+<div class="w-full p-5 bg-red-600 text-gray-50 border border-gray-700 rounded-xl shadow-2xl">
   <canvas id="chart"></canvas>
 </div>
 
-<div class="w-full pl-5 pr-5">
+<div class="w-full pl-5 pr-5 mt-6 bg-red-600 text-gray-50 border border-gray-700 rounded-xl shadow-2xl p-5">
   <br>
   <b>{{ game_name }}</b> #{{ rank }}
   <br>
@@ -64,19 +64,21 @@
   Description: {{ description | safe }}
   <br><br>
 
-  <img src = {{ img_link }}></img>
+  <img src={{ img_link }} class="rounded-lg border border-gray-700">
 </div>
 
-<form action="/game" method="POST" class="pl-5">
+<form action="/game" method="POST" class="pl-5 mt-6 bg-red-600 text-gray-50 border border-gray-700 rounded-xl shadow-2xl p-5">
   How many units do you think this game sold? (in millions)
-  <input class="border-2 p-1" required type="number" name="guessed_sales" min="0" max="1000000" step="any">
+
+  <input class="border border-gray-600 bg-gray-800 text-gray-100 p-1 rounded ml-2"
+         required type="number" name="guessed_sales" min="0" max="1000000" step="any">
 
   <input type="hidden" name="game_index" value="{{ game_index }}">
   <input type="hidden" name="guess_arr" value="{{ guess_arr }}">
   <input type="hidden" name="ans_arr" value="{{ ans_arr }}">
   <input type="hidden" name="game_arr" value='{{ game_arr }}'>
 
-  <input type="submit" class="border-2 p-1">
+  <input type="submit" class="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600 ml-2 cursor-pointer">
 </form>
 
 </div>
@@ -94,18 +96,16 @@
       {
         label: "Guesses",
         data: guess_arr,
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
         borderColor: "rgba(54, 162, 235, 1)",
-        borderWidth: 1,
-        //grouped: false
+        borderWidth: 1
       },
       {
         label: "Real Answers",
         data: ans_arr,
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-        //grouped: false
+        borderWidth: 1
       }
     ]
   };
@@ -116,16 +116,26 @@
     options: {
       indexAxis: "y",
       responsive: true,
+      plugins: {
+        legend: {
+          labels: {
+            color: "#f3f4f6"
+          }
+        }
+      },
       scales: {
         x: {
-          beginAtZero: true
+          beginAtZero: true,
+          ticks: { color: "#f3f4f6" },
+          grid: { color: "rgba(255,255,255,0.1)" }
         },
         y: {
-          ticks: {
-            autoSkip: false
-          }
+          ticks: { color: "#f3f4f6", autoSkip: false },
+          grid: { color: "rgba(255,255,255,0.1)" }
         }
       }
     }
   });
 </script>
+
+</body>
