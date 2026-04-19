@@ -4,42 +4,49 @@
   <title>Profile</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-linear-to-r from-cyan-500 to-blue-500" text-gray-900">
 
-<nav class="bg-red-600 border-b">
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937,_#030712)] text-gray-100">
+
+<nav class="bg-red-600 border-b border-red-800">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
     <a href="/game" class="text-lg font-semibold text-gray-50">
       GAME
     </a>
 
-
     <ul class="flex space-x-4">
-        <a href="/homepage" class="text-gray-50 hover:text-black">
-          Home
-        </a>
-    </ul>
-    <ul class="flex space-x-4">
-        <a href="/search" class="text-gray-50 hover:text-black">
-          Search
-        </a>
+      <a href="/homepage" class="text-gray-50 hover:text-black">
+        Home
+      </a>
     </ul>
 
     <ul class="flex space-x-4">
-        <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">
-          Profile
-        </a>
+      <a href="/search" class="text-gray-50 hover:text-black">
+        Search
+      </a>
+    </ul>
+
+    <ul class="flex space-x-4">
+      <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">
+        Profile
+      </a>
     </ul>
 
     <a href="/logout"
-       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Logout
     </a>
   </div>
 </nav>
 
-<div class="max-w-3xl text-gray-50 mx-auto mt-10 px-4">
-  <h1 class="text-3xl text-gray-50 font-bold text-center mb-4">{{username}}'s Profile</h1>
+<div class="max-w-3xl mx-auto mt-12 px-6 py-6 
+            bg-gray-900 text-gray-100 
+            border border-gray-700 
+            rounded-xl shadow-2xl">
+
+  <h1 class="text-3xl font-bold text-center mb-6">
+    {{username}}'s Profile
+  </h1>
 
   <h3 class="text-xl font-semibold mb-2">Bio</h3>
 
@@ -50,7 +57,7 @@
         id="bio-input"
         rows="3"
         placeholder="Write something about yourself..."
-        class="w-full border border-gray-300 rounded p-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        class="w-full bg-gray-800 border border-gray-600 text-gray-100 rounded p-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >{{ bio }}</textarea>
 
       <button 
@@ -77,6 +84,7 @@
       </li>
     {% endfor %}
   </ul>
+
 </div>
 
 {% if is_own_profile %}
