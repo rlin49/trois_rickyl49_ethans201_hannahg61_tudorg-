@@ -87,11 +87,11 @@ Global Sales: {{ global_sales }}
 
 </div>
 
-<div id="review-form" class="w-[50%] pr-5 pt-2 pl-2 bg-gray-800 border border-gray-700 rounded-xl shadow-2xl mr-4 ml-2 p-4">
+<div id="review-form" class="w-[50%] pr-5 pt-2 pl-2 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl mr-4 ml-2 p-4">
 
 <form action="/review" method="POST">
 <textarea name="body_text" rows="20" required cols="100"
-          class="border border-gray-600 bg-gray-900 text-gray-100 p-2 rounded w-full"></textarea>
+          class="border border-gray-600 bg-gray-800 text-gray-100 p-2 rounded w-full"></textarea>
 <input type="hidden" name="game_id" value='{{ game_id }}'>
 <input type="submit" class="bg-red-600 px-3 py-1 rounded mt-2 hover:bg-red-700 cursor-pointer">
 </form>
@@ -121,7 +121,7 @@ Global Sales: {{ global_sales }}
 
 <form action="/purge" method="POST">
   <input type="hidden" name="game_id" value='{{ game_id }}'>
-  <input type="submit" class="text-white">
+  <input type="submit" class="text-gray-900">
 </form>
 
 </div>
