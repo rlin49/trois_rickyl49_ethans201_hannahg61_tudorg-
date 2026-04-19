@@ -3,43 +3,42 @@
 <head>
   <title>Homepage</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.0/chart.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-<body class="bg-gray-50">
 
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937,_#030712)] text-gray-100">
 
-<nav class="bg-gray-100 border-b">
+<nav class="bg-red-700 border-b border-red-900">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
 
-    <a href="/game" class="text-lg font-semibold text-gray-800">
+    <a href="/game" class="text-lg font-semibold text-gray-50">
       GAME
     </a>
 
     <ul class="flex space-x-4">
-        <a href="/homepage" class="text-gray-700 hover:text-black">
+        <a href="/homepage" class="text-gray-50 hover:text-black">
           Home
         </a>
     </ul>
     <ul class="flex space-x-4">
-        <a href="/search" class="text-gray-700 hover:text-black">
+        <a href="/search" class="text-gray-50 hover:text-black">
           Search
         </a>
     </ul>
 
-
     {% if logged_in == True %}
     <ul class="flex space-x-4">
-        <a href="/profile/{{ username }}" class="text-gray-700 hover:text-black">
+        <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">
           Profile
         </a>
     </ul>
     <a href="/logout"
-       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Logout
     </a>
     {% else %}
     <a href="/login.html"
-       class="text-sm border border-gray-400 text-gray-700 px-3 py-1 rounded hover:bg-gray-200">
+       class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Log In
     </a>
     {% endif %}
@@ -47,28 +46,26 @@
   </div>
 </nav>
 
-
 <div class="max-w-4xl mx-auto mt-12 text-center px-4">
 
   <h1 class="text-3xl font-bold mb-4">
     Welcome, {{ username }}
   </h1>
 
-  <div class="bg-white shadow-md rounded-lg mx-auto mb-6 max-w-xl">
+  <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-lg mx-auto mb-6 max-w-xl">
     <div class="p-6">
-      <p class="">
-
+      <p>
         Top Ranked Games: <br>
-          {{ game_ranking | safe }}
+        {{ game_ranking | safe }}
       </p>
     </div>
   </div>
-  <div class="bg-white shadow-md rounded-lg mx-auto mb-6 max-w-xl">
-    <div class="p-6">
-      <p class="">
 
+  <div class="bg-gray-800 border border-gray-700 shadow-2xl rounded-lg mx-auto mb-6 max-w-xl">
+    <div class="p-6">
+      <p>
         Lowest Ranked Games: <br>
-          {{ bad_ranking | safe }}
+        {{ bad_ranking | safe }}
       </p>
     </div>
   </div>
@@ -76,25 +73,23 @@
 </div>
 
 <div class="max-w-4xl mx-auto mt-12 text-center px-4">
-  <div class="bg-white shadow-md rounded-lg mx-auto mb-6 max-w-xl">
+  <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-lg mx-auto mb-6 max-w-xl">
     <div class="p-6">
-      <p class="">
-
+      <p>
         Personal Recommendations: <br>
-        <div class = "text-blue-700">
-          <a href = "/gamepage/25">Pokemon Black & White</a><br>
+        <div class="text-blue-400">
+          <a href="/gamepage/25" class="hover:underline">Pokemon Black & White</a><br>
         </div>
       </p>
     </div>
   </div>
-
 </div>
 
-<div class = "max-w-4xl mx-auto mt-12 text-center px-4">
+<div class="max-w-4xl mx-auto mt-12 text-center px-4">
   All Game Ratings:
 </div>
-<canvas id = "chart" class="h-[80%] w-[90%] pl-[5%] pr-[5%]"></canvas>
 
+<canvas id="chart" class="h-[80%] w-[90%] pl-[5%] pr-[5%]"></canvas>
 
 <script>
 const ctx = document.querySelector("#chart").getContext("2d");
@@ -110,19 +105,15 @@ for(let i = 0; i < 100; i++)
     ratings.push(arr.filter((x) => x == i).length)
 }
 
-
-
-
 const data = {
   labels: labels,
   datasets: [
     {
       label: "Number of Ratings",
       data: ratings,
-      backgroundColor: "rgba(54, 162, 235, 0.5)",
-      borderColor: "rgba(54, 162, 235, 1)",
-      borderWidth: 1,
-      //grouped: false
+      backgroundColor: "rgba(59, 130, 246, 0.6)",
+      borderColor: "rgba(59, 130, 246, 1)",
+      borderWidth: 1
     }
   ]
 };
@@ -133,23 +124,29 @@ const chart = new Chart(ctx, {
   options: {
     indexAxis: "x",
     responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: "#f3f4f6"
+        }
+      }
+    },
     scales: {
       x: {
-        // stacked: true
-        beginAtZero: true
+        beginAtZero: true,
+        ticks: { color: "#f3f4f6" },
+        grid: { color: "rgba(255,255,255,0.1)" }
       },
       y: {
-        ticks: {
-          autoSkip: false
-        }
+        ticks: { color: "#f3f4f6", autoSkip: false },
+        grid: { color: "rgba(255,255,255,0.1)" }
       }
     }
   }
 });
-
 </script>
 
-<div class="text-center text-red-500 mt-4">
+<div class="text-center text-red-400 mt-4">
   {{ error }}
 </div>
 
