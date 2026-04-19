@@ -10,22 +10,18 @@
     </a>
 
     <ul class="flex space-x-4">
-        <a href="/homepage" class="text-gray-50 hover:text-black">
-          Home
-        </a>
+        <a href="/homepage" class="text-gray-50 hover:text-black">Home</a>
     </ul>
+
     <ul class="flex space-x-4">
-        <a href="/search" class="text-gray-50 hover:text-black">
-          Search
-        </a>
+        <a href="/search" class="text-gray-50 hover:text-black">Search</a>
     </ul>
 
     {% if logged_in == True %}
     <ul class="flex space-x-4">
-        <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">
-          Profile
-        </a>
+        <a href="/profile/{{ username }}" class="text-gray-50 hover:text-black">Profile</a>
     </ul>
+
     <a href="/logout"
        class="text-sm border border-gray-50 text-gray-50 px-3 py-1 rounded hover:bg-gray-200 hover:text-black">
        Logout
@@ -40,36 +36,58 @@
   </div>
 </nav>
 
-<div class="flex justify-center items-center mt-10">
-<div id="game-info" class="pl-5 pt-2 pr-2 w-full max-w-4xl">
-
-<div class="text-center px-4">
-  <h1 class="text-3xl font-bold mb-6">
+<!-- TITLE -->
+<div class="text-center mt-10">
+  <h1 class="text-3xl font-bold">
     Search for one of our many games here
   </h1>
 </div>
 
-{% if searching %}
-  <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-xl p-6 max-w-xl mx-auto">
-    <form action="/search" method="GET" class="text-center">
-      <label class="block mb-2 text-gray-200">
-        Enter Game Name:
-      </label>
+<!-- CONTENT WRAPPER -->
+<div class="max-w-4xl mx-auto mt-8 px-4">
 
-      <input type="text" name="game_name"
-             class="w-full bg-gray-800 border border-gray-600 text-gray-100 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-red-500">
+  <!-- SEARCH FORM (always visible) -->
+  <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-xl p-6 mb-6">
 
-      <input type="submit"
-             class="bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 cursor-pointer">
-    </form>
+    {% if searching %}
+      <form action="/search" method="GET" class="text-center">
+
+        <label class="block mb-2 text-gray-200">
+          Enter Game Name:
+        </label>
+
+        <input type="text" name="game_name"
+               class="w-full bg-gray-800 border border-gray-600 text-gray-100 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-red-500">
+
+        <input type="submit"
+               class="bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 cursor-pointer">
+
+      </form>
+    {% else %}
+      <form action="/search" method="GET" class="text-center">
+
+        <label class="block mb-2 text-gray-200">
+          Enter Game Name:
+        </label>
+
+        <input type="text" name="game_name"
+               class="w-full bg-gray-800 border border-gray-600 text-gray-100 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-red-500">
+
+        <input type="submit"
+               class="bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 cursor-pointer">
+
+      </form>
+    {% endif %}
+
   </div>
-{% else %}
- <div class="p-4 bg-gray-900 border border-gray-700 shadow-2xl rounded-xl">
-  {{ games | safe }}
- </div>
-{% endif %}
 
-</div>
+  <!-- RESULTS -->
+  {% if not searching %}
+    <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-xl p-6">
+      {{ games | safe }}
+    </div>
+  {% endif %}
+
 </div>
 
 </body>
