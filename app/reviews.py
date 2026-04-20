@@ -58,3 +58,17 @@ def get_user(rev_id):
     DB.commit()
     DB.close()
     return DBCF[0]
+
+def get_game(rev_id):
+    DB = sqlite3.connect(DB_NAME)
+    DBC = DB.cursor()
+
+    DBC.execute("SELECT game_id FROM reviews WHERE id = ?;", (rev_id, ))
+    DBCF = DBC.fetchone()
+    if DBCF is None:
+        return ""
+    if DBCF[0] is None:
+        return ""
+    DB.commit()
+    DB.close()
+    return DBCF[0]

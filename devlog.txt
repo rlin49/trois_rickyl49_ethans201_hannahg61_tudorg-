@@ -53,3 +53,6 @@ rickyL -- 2026-04-16 11:00
 tudorG -- 2026-04-19 20:00
 - Adding profile functionality (allowing users to create/update bios and see those of others)
 - Adding favorite functionality (users can favorite games which then show up on their profile page)
+
+tudorG -- 2026-04-20 18:00
+- Final checks and updating the design doc before recording
