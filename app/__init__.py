@@ -12,7 +12,7 @@ DBC = DB.cursor()
 
 DBC.execute("CREATE TABLE IF NOT EXISTS games(name TEXT, reviews TEXT, user_rating INT, num_ratings INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
-DBC.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, reviews TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
+DBC.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, reviews TEXT, bio TEXT, favorites TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
 DBC.execute("CREATE TABLE IF NOT EXISTS reviews(game_id INT, body TEXT, user_id INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
@@ -74,6 +74,15 @@ def homepage():
 
     return render_template('homepage.html',username= username, error="", game_ranking = game_ranking, bad_ranking = bad_ranking, logged_in = logged_in, full_ratings = full_ratings)
 
+@app.route("/updatebio", methods = ["GET", "POST"])
+def updatebio():
+    if 'username' not in session or 'bio' not in request.form:
+        return redirect(url_for("homepage"))
+    else:
+        users.update_bio(request.form["bio"], session["username"])
+        print(users.get_bio(session["username"]))
+        return(redirect(url_for("profile", username=session['username'])))
+
 @app.route("/screwuptheratingsletsago")
 def screwitup():
     if 'username' not in session or session['username'] != "test":
@@ -90,7 +99,12 @@ def gamepage(game_id):
     if 'username' not in session:
         username = "Guest"
         logged_in = False
+        is_favorite = False
     else:
+        # users.add_favorite(game_id, session["username"])
+        # users.remove_favorite(game_id, session["username"])
+        print("Currect Favorites Upon Page Load: " + users.get_favorites(session["username"]))
+        is_favorite = users.is_favorite(game_id, session["username"])
         username = session['username']
         logged_in = True
     # if 'username' not in session:
@@ -137,41 +151,43 @@ def gamepage(game_id):
     description = description.replace("<br />", "")
     description = description.replace("<p>", "")
     description = description.replace("</p>", "")
+    #
 
-    db = sqlite3.connect(DB_NAME)
-    c = db.cursor()
-
-    file = open("keys/key_rawg.txt")
-    api_key = file.read().strip()
-    base_link = "https://api.rawg.io/api/games/"
-    addition = f"/screenshots?key={api_key}"
-
-    bad_chars = [":", "/", "!", "'", "&", "(", ")"]
-    parentheticalizing = False
-
-    try:
-        temp = ""
-        for i in game_name:
-            if i == " ":
-                temp += "-"
-            elif i not in bad_chars:
-                temp += i
-            elif i == "&":
-                temp += "and"
-        print(temp)
-        img_link = base_link + temp + addition
-        print(img_link)
-        img_req = urllib.request.urlopen(img_link)
-        img_json = img_req.read()
-        img_data = json.loads(img_json)
-        print(img_data)
-        if "detail" in img_data:
-            img_link = ""
-        if "results" in img_data:
-            img_link = img_data["results"][0]["image"]
-    except:
-        print("huh")
-        img_link = ""
+    img_link = ""
+    # db = sqlite3.connect(DB_NAME)
+    # c = db.cursor()
+    #
+    # file = open("keys/key_rawg.txt")
+    # api_key = file.read().strip()
+    # base_link = "https://api.rawg.io/api/games/"
+    # addition = f"/screenshots?key={api_key}"
+    #
+    # bad_chars = [":", "/", "!", "'", "&", "(", ")"]
+    # parentheticalizing = False
+    #
+    # try:
+    #     temp = ""
+    #     for i in game_name:
+    #         if i == " ":
+    #             temp += "-"
+    #         elif i not in bad_chars:
+    #             temp += i
+    #         elif i == "&":
+    #             temp += "and"
+    #     # print(temp)
+    #     img_link = base_link + temp + addition
+    #
+    #     img_req = urllib.request.urlopen(img_link)
+    #     img_json = img_req.read()
+    #     img_data = json.loads(img_json)
+    #     # print(img_data)
+    #     if "detail" in img_data:
+    #         img_link = ""
+    #     if "results" in img_data:
+    #         img_link = img_data["results"][0]["image"]
+    # except:
+    #     # print("huh")
+    #     img_link = ""
 
     review_arr= games.get_reviews(game_id).split(";")
     review_str = ""
@@ -190,7 +206,27 @@ def gamepage(game_id):
 #        review_str += reviews.get_review(rev)
 #        review_str += "<br>"
 
-    return render_template("gamepage.html", username = username, logged_in = logged_in, img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+    if is_favorite:
+        text_color = "red-400"
+    else:
+        text_color = "grey-500"
+
+    return render_template("gamepage.html", username = username, logged_in = logged_in, text_color = text_color,  img_link = img_link, game_id = game_id, game_name = game_name, user_ranking = user_ranking, reviews = review_str,  rank = rank, platforms = platforms, year = year, genre = genre, publisher = publisher, na_sales = na_sales, eu_sales = eu_sales, jp_sales = jp_sales, other_sales = other_sales, global_sales = global_sales, rating = rating, description = description)
+
+@app.route("/favorite/<game_id>")
+def favorite(game_id):
+    if "username" not in session:
+        return redirect(f"/gamepage/{game_id}")
+    is_favorite = users.is_favorite(game_id, session["username"])
+    print(is_favorite)
+
+    if is_favorite:
+        users.remove_favorite(game_id, session["username"])
+    else:
+        print("pl")
+        users.add_favorite(game_id, session["username"])
+    print("Favorites upon end of add: " + users.get_favorites(session["username"]))
+    return redirect(f"/gamepage/{game_id}")
 
 @app.route("/purgeall")
 def purgeall():
@@ -388,14 +424,22 @@ def game():
 def profile(username):
     if 'username' not in session:
         return redirect(url_for('login'))
-    user=session['username']
     if username != session['username']:
         is_own_profile=False
     else:
         is_own_profile=True
     if username is None:
         return(redirect(url_for("profile", username=session['username'])))
-    return render_template("profile.html",username=user, is_own_profile=is_own_profile)
+    bio = users.get_bio(username)
+    favorites = users.get_favorites(username)
+    print(favorites)
+    fav_arr = favorites.split(";")
+    links = ""
+    if favorites != "":
+        for fav_id in fav_arr:
+            links += f"<a class = 'text-blue-500 'href = '/gamepage/{fav_id}'>{games.get_name(int(fav_id))}</a><br>"
+
+    return render_template("profile.html",username=username, is_own_profile=is_own_profile, bio = bio, links = links)
 
 @app.route("/profile")
 @app.route("/profile/")
@@ -466,7 +510,7 @@ def register():
       db.close()
       return render_template("register.html", error="Username already taken!")
 
-    c.execute("INSERT INTO users VALUES (?, ?, ?, NULL)",
+    c.execute("INSERT INTO users VALUES (?, ?, ?, NULL, NULL, NULL)",
     (username, password, reviews))
 
     db.commit()

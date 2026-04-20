@@ -39,9 +39,9 @@
   </div>
 </nav>
 
-<div class="max-w-3xl mx-auto mt-12 px-6 py-6 
-            bg-gray-900 text-gray-100 
-            border border-gray-700 
+<div class="max-w-3xl mx-auto mt-12 px-6 py-6
+            bg-gray-900 text-gray-100
+            border border-gray-700
             rounded-xl shadow-2xl">
 
   <h1 class="text-3xl font-bold text-center mb-6">
@@ -51,27 +51,30 @@
   <h3 class="text-xl font-semibold mb-2">Bio</h3>
 
   {% if is_own_profile %}
-    <form id="bio-form" action="/update_bio" method="POST" class="mb-6">
-      <textarea 
-        name="bio" 
+    <form id="bio-form" action="/updatebio" method="POST" class="mb-6">
+      <textarea
+        name="bio"
         id="bio-input"
         rows="3"
         placeholder="Write something about yourself..."
         class="w-full bg-gray-800 border border-gray-600 text-gray-100 rounded p-2 mb-2 focus:outline-none focus:ring-2 focus:ring-red-500"
       >{{ bio }}</textarea>
 
-      <button 
+      <button
         type="submit"
         class="bg-red-600 text-white text-sm px-4 py-1 rounded hover:bg-red-700"
       >
         Save Bio
       </button>
     </form>
-  {% else %}
-    <p class="mb-6 text-gray-300">{{ bio if bio else "No bio yet." }}</p>
+
   {% endif %}
 
-  <h3 class="text-xl font-semibold mb-2">Best Times</h3>
+  <p class="mb-6 text-gray-300">{{ bio if bio else "No bio yet." }}</p>
+
+  <h3 class="text-xl font-semibold mb-2">Favorites:</h3>
+
+  {{ links | safe}}
   <ul class="space-y-1 text-gray-300">
     {% for level, best_time in times %}
       <li>
@@ -87,7 +90,7 @@
 
 </div>
 
-{% if is_own_profile %}
+<!-- {% if is_own_profile %}
 <script>
   document.getElementById('bio-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -110,7 +113,7 @@
     });
   });
 </script>
-{% endif %}
+{% endif %} -->
 
 </body>
 </html>
