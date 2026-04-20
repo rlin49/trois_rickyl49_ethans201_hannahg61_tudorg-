@@ -448,6 +448,18 @@ def profilez():
         return redirect(url_for('login'))
     return(redirect(url_for("profile", username=session['username'])))
 
+@app.route("/update_bio", methods=["POST"])
+def update_bio():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    bio = request.form.get("bio", "").strip()
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("UPDATE users SET bio = ? WHERE username = ?", (bio, session['username']))
+    db.commit()
+    db.close()
+    return redirect(url_for('profile', username=session['username']))
+
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
 def loginhtml():
