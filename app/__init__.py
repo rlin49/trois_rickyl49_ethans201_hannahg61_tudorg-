@@ -12,7 +12,7 @@ DBC = DB.cursor()
 
 DBC.execute("CREATE TABLE IF NOT EXISTS games(name TEXT, reviews TEXT, user_rating INT, num_ratings INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
-DBC.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT, reviews TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
+DBC.execute("CREATE TABLE IF NOT EXISTS users(username TEXT, password TEXT,bio TEXT, reviews TEXT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
 DBC.execute("CREATE TABLE IF NOT EXISTS reviews(game_id INT, body TEXT, user_id INT, id INTEGER PRIMARY KEY AUTOINCREMENT);")
 
@@ -388,14 +388,17 @@ def game():
 def profile(username):
     if 'username' not in session:
         return redirect(url_for('login'))
-    user=session['username']
-    if username != session['username']:
-        is_own_profile=False
-    else:
-        is_own_profile=True
-    if username is None:
-        return(redirect(url_for("profile", username=session['username'])))
-    return render_template("profile.html",username=user, is_own_profile=is_own_profile)
+    user = session['username']
+    is_own_profile = (username == session['username'])
+
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("SELECT bio FROM users WHERE username = ?", (username,))
+    row = c.fetchone()
+    db.close()
+    bio = row[0] if row and row[0] else ""
+
+    return render_template("profile.html", username=user, is_own_profile=is_own_profile, bio=bio)
 
 @app.route("/profile")
 @app.route("/profile/")
@@ -403,6 +406,18 @@ def profilez():
     if 'username' not in session:
         return redirect(url_for('login'))
     return(redirect(url_for("profile", username=session['username'])))
+    
+@app.route("/update_bio", methods=["POST"])
+def update_bio():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    bio = request.form.get("bio", "").strip()
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("UPDATE users SET bio = ? WHERE username = ?", (bio, session['username']))
+    db.commit()
+    db.close()
+    return redirect(url_for('profile', username=session['username']))
 
 # THESE ARE HERE TO MAKE SURE /LOGIN.HTML AND /REGISTER.HTML WORK. DO NOT REMOVE
 @app.route("/login.html")
@@ -466,8 +481,8 @@ def register():
       db.close()
       return render_template("register.html", error="Username already taken!")
 
-    c.execute("INSERT INTO users VALUES (?, ?, ?, NULL)",
-    (username, password, reviews))
+    c.execute("INSERT INTO users VALUES (?, ?, ?, ?, NULL)",
+    (username, password,"Bio to be created here!", reviews))
 
     db.commit()
     db.close()
