@@ -49,35 +49,26 @@
   <!-- SEARCH FORM (always visible) -->
   <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-xl p-6 mb-6">
 
-    {% if searching %}
+
       <form action="/search" method="GET" class="text-center">
 
         <label class="block mb-2 text-gray-200">
           Enter Game Name:
         </label>
 
-        <input type="text" name="game_name"
+        <input type="text" name="name"
                class="w-full bg-gray-800 border border-gray-600 text-gray-100 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-red-500">
+
+        <select name = "type">
+            <option value = "users">Users</option>
+            <option value = "games">Games</option>
+        </select>
 
         <input type="submit"
                class="bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 cursor-pointer">
 
       </form>
-    {% else %}
-      <form action="/search" method="GET" class="text-center">
 
-        <label class="block mb-2 text-gray-200">
-          Enter Game Name:
-        </label>
-
-        <input type="text" name="game_name"
-               class="w-full bg-gray-800 border border-gray-600 text-gray-100 p-2 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-red-500">
-
-        <input type="submit"
-               class="bg-red-600 px-4 py-2 rounded text-white hover:bg-red-700 cursor-pointer">
-
-      </form>
-    {% endif %}
 
   </div>
 

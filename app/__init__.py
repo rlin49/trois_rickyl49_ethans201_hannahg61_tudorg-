@@ -297,21 +297,32 @@ def search():
         logged_in = True
     # if 'username' not in session:
     #     return redirect(url_for('homepage'))
-    if 'username' not in session:
-        logged_in = False
-    else:
-        username = session['username']
-        logged_in = True
-    if "game_name" in request.args:
-        db = sqlite3.connect(DB_NAME)
-        c = db.cursor()
-        c.execute("SELECT * FROM games WHERE name LIKE '%' || ? || '%';", (request.args["game_name"], ))
-        fetch = c.fetchall()
 
-        game_arr = ""
-        for game in fetch:
-            game_arr += f"<a href = '/gamepage/{game[4] - 1}'>{game[0]}</a><br>"
-        return render_template("search.html", username = username, logged_in = logged_in, games = game_arr)
+
+    if "name" in request.args:
+
+        if request.args["type"] == "games":
+            db = sqlite3.connect(DB_NAME)
+            c = db.cursor()
+            c.execute("SELECT * FROM games WHERE name LIKE '%' || ? || '%';", (request.args["name"], ))
+            fetch = c.fetchall()
+
+            game_arr = ""
+            for game in fetch:
+                game_arr += f"<a href = '/gamepage/{game[4] - 1}'>{game[0]}</a><br>"
+            return render_template("search.html", username = username, logged_in = logged_in, games = game_arr)
+        elif request.args["type"] == "users":
+            db = sqlite3.connect(DB_NAME)
+            c = db.cursor()
+            c.execute("SELECT username FROM users WHERE username LIKE '%' || ? || '%';", (request.args["name"], ))
+            fetch = c.fetchall()
+
+            user_arr = ""
+            for user in fetch:
+                user_arr += f"<a href = '/profile/{user[0]}'>{user[0]}</a><br>"
+            return render_template("search.html", username = username, logged_in = logged_in, games = user_arr)
+        else:
+            return render_template("search.html", username = username, logged_in = logged_in, searching = True)
     else:
         return render_template("search.html", username = username, logged_in = logged_in, searching = True)
 
