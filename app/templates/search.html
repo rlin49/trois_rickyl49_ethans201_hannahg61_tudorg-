@@ -1,6 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#1f2937,_#030712)] text-gray-100">
+<body class="min-h-screen bg-[radial-gradient(circle_at_top,_#030712,_#1f2937)] text-gray-100">
 
 <nav class="bg-red-700 border-b border-red-900">
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -36,17 +36,16 @@
   </div>
 </nav>
 
-<!-- TITLE -->
+
 <div class="text-center mt-10">
   <h1 class="text-3xl font-bold">
     Search for one of our many games here
   </h1>
 </div>
 
-<!-- CONTENT WRAPPER -->
 <div class="max-w-4xl mx-auto mt-8 px-4">
 
-  <!-- SEARCH FORM (always visible) -->
+
   <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-xl p-6 mb-6">
 
 
@@ -72,7 +71,6 @@
 
   </div>
 
-  <!-- RESULTS -->
   {% if not searching %}
     <div class="bg-gray-900 border border-gray-700 shadow-2xl rounded-xl p-6">
       {{ games | safe }}

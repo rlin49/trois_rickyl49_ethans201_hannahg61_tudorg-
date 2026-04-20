@@ -122,7 +122,7 @@ Global Sales: {{ global_sales }}
   <input type="hidden" name="game_id" value='{{ game_id }}'>
   <input type="submit" class="bg-red-600 px-3 py-1 rounded mt-2 hover:bg-red-700 cursor-pointer">
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% with messages = get_flashed_messages() %}
   {% if messages %}
     {% for category, message in messages %}
       <div class="mt-2 text-sm text-red-300">{{ message }}</div>
