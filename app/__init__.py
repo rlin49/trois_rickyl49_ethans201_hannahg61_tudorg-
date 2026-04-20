@@ -430,6 +430,15 @@ def profile(username):
         is_own_profile=True
     if username is None:
         return(redirect(url_for("profile", username=session['username'])))
+
+    db = sqlite3.connect(DB_NAME)
+    c = db.cursor()
+    c.execute("SELECT EXISTS(SELECT 1 FROM users WHERE username=?)", (username,))
+    userExists=c.fetchall()
+    db.commit()
+    db.close()
+    if userExists[0][0]==0 & is_own_profile==False:
+        flash("This username is not connected to an account. This is a template placeholder", "error")
     bio = users.get_bio(username)
     favorites = users.get_favorites(username)
     print(favorites)
