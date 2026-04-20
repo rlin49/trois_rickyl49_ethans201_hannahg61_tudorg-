@@ -99,7 +99,7 @@ const arr = "{{ full_ratings }}".split(";").map(Number);
 const ratings = [];
 const labels = [];
 
-for(let i = 0; i < 100; i++)
+for(let i = 0; i < 101; i++)
 {
     labels.push(i);
     ratings.push(arr.filter((x) => x == i).length)
