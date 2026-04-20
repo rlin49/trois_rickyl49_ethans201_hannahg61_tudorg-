@@ -49,3 +49,7 @@ tudorG -- 2026-04-16 10:00
 
 rickyL -- 2026-04-16 11:00
 - Finished adding profile to navbar through edits of the flask app and html files
+
+tudorG -- 2026-04-19 20:00
+- Adding profile functionality (allowing users to create/update bios and see those of others)
+- Adding favorite functionality (users can favorite games which then show up on their profile page)
