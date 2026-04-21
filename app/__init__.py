@@ -269,7 +269,7 @@ def rate():
 @app.route("/review", methods = ["GET", "POST"])
 def review():
     if 'username' not in session:
-        return redirect(f"/gamepage/{request.form['game_id']}")
+        return redirect(url_for('login'))
     if 'game_id' not in request.form or 'body_text' not in request.form:
         return redirect(url_for('search'))
 
