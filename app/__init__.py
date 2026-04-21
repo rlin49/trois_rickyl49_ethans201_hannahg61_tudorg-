@@ -253,7 +253,8 @@ def purge():
 @app.route("/rate", methods = ["GET", "POST"])
 def rate():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        flash("You must be logged in to rate a game.", "error")
+        return redirect(f"/gamepage/{request.form['game_id']}")
     if 'game_id' not in request.form or 'rating' not in request.form:
         return redirect(url_for('search'))
     if 'rated_games' not in session:
@@ -269,7 +270,8 @@ def rate():
 @app.route("/review", methods = ["GET", "POST"])
 def review():
     if 'username' not in session:
-        return redirect(url_for('login'))
+        flash("You must be logged in to review a game.", "error")
+        return redirect(f"/gamepage/{request.form['game_id']}")
     if 'game_id' not in request.form or 'body_text' not in request.form:
         return redirect(url_for('search'))
 
