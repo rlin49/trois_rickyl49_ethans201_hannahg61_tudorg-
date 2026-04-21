@@ -216,6 +216,7 @@ def gamepage(game_id):
 @app.route("/favorite/<game_id>")
 def favorite(game_id):
     if "username" not in session:
+        flash("You must be logged in to favorite a game.", "error")
         return redirect(f"/gamepage/{game_id}")
     is_favorite = users.is_favorite(game_id, session["username"])
     print(is_favorite)
