@@ -56,3 +56,6 @@ tudorG -- 2026-04-19 20:00
 
 tudorG -- 2026-04-20 18:00
 - Final checks and updating the design doc before recording
+
+tudorG, rickyL, hannahG, ethanS -- 2026-04-20 22:00
+- Recording final video
