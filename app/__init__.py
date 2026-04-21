@@ -437,8 +437,8 @@ def game():
 @app.route("/profile/<username>")
 def profile(username):
     if 'username' not in session:
-        return redirect(url_for('login'))
-    if username != session['username']:
+        is_own_profile = False
+    elif username != session['username']:
         is_own_profile=False
     else:
         is_own_profile=True
@@ -476,8 +476,8 @@ def profile(username):
 @app.route("/profile")
 @app.route("/profile/")
 def profilez():
-    if 'username' not in session:
-        return redirect(url_for('login'))
+    # if 'username' not in session:
+    #     return redirect(url_for('login'))
     return(redirect(url_for("profile", username=session['username'])))
 
 @app.route("/update_bio", methods=["POST"])
