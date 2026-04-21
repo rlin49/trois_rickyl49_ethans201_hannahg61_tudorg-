@@ -89,7 +89,9 @@
   All Game Ratings:
 </div>
 
-<canvas id="chart" class="h-[60%] w-[70%] pl-[5%] pr-[5%]"></canvas>
+<div class = "h-[10%]">
+<canvas id="chart" class="pl-[5%] pr-[5%]"></canvas>
+</div>
 
 <script>
 const ctx = document.querySelector("#chart").getContext("2d");
@@ -109,7 +111,7 @@ const data = {
   labels: labels,
   datasets: [
     {
-      label: "Number of Ratings",
+      label: "Number of Games",
       data: ratings,
       backgroundColor: "rgba(59, 130, 246, 0.6)",
       borderColor: "rgba(59, 130, 246, 1)",
@@ -135,17 +137,32 @@ const chart = new Chart(ctx, {
       x: {
         beginAtZero: true,
         ticks: { color: "#f3f4f6" },
-        grid: { color: "rgba(255,255,255,0.1)",
+        grid: { color: "rgba(255,255,255,0.1)"},
         title: {
           align: 'center',
           display: true,
-          text: "Score"
+          text: 'Score',
+          color: '#ffffff',
+          font: {
+            size: 18
+          },
+          padding: 20
         }
-        }
+
       },
       y: {
         ticks: { color: "#f3f4f6", autoSkip: false },
-        grid: { color: "rgba(255,255,255,0.1)" }
+        grid: { color: "rgba(255,255,255,0.1)" },
+        title: {
+          align: 'center',
+          display: true,
+          text: "Number of Games",
+          color: '#ffffff',
+          font: {
+            size: 18
+          },
+          padding: 20
+        }
       }
     }
   }
