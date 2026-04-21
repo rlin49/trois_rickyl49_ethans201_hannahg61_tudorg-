@@ -124,7 +124,7 @@ Global Sales: {{ global_sales }}
 
   {% with messages = get_flashed_messages() %}
   {% if messages %}
-    {% for category, message in messages %}
+    {% for message in messages %}
       <div class="mt-2 text-sm text-red-300">{{ message }}</div>
     {% endfor %}
   {% endif %}
