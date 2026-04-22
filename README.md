@@ -79,4 +79,4 @@ Users are given game information and have to guess total sales, which updates a 
 * You can favorite games.
 
 ### KNOWN BUGS/ISSUES
-* Submitting ratings/reviews and reloading the page too quickly in a short amount of time may cause issues. 
+* Submitting ratings/reviews and/or reloading the page too quickly in a short amount of time may cause issues and lock the database. Only known recourse is to remove the database file located at /app/Data/database.db, and then in /app run populate_db.py. App should work fine after but previous data will obviously have been wiped.
