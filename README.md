@@ -72,3 +72,11 @@ Users are given game information and have to guess total sales, which updates a 
 ### Run \_\_init\_\_.py
 
   ``` python __init__.py ```
+
+### FEATURE SPOTLIGHT
+* You can access other people's profile through the search page. 
+* You can access the gamepage where someone wrote a review through their profile.
+* You can favorite games.
+
+### KNOWN BUGS/ISSUES
+* Submitting ratings/reviews and reloading the page too quickly in a short amount of time may cause issues. 
