@@ -24,6 +24,8 @@ def before_request():
     if "username" in session:
         if users.get_id(session["username"]) == -1:
             session.pop("username", None)
+            if "rated_games" in session:
+                session.pop("rated_games", None)
             return redirect(url_for("homepage"))
 
 @app.route("/")
@@ -34,6 +36,8 @@ def main():
 @app.route("/logout")
 def logout():
     session.pop("username", None)
+    if "rated_games" in session:
+        session.pop("rated_games", None)
     return redirect(url_for("homepage"))
 
 @app.route("/homepage")
