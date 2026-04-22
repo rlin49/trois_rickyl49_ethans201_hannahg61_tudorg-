@@ -18,6 +18,14 @@ DBC.execute("CREATE TABLE IF NOT EXISTS reviews(game_id INT, body TEXT, user_id 
 
 app.secret_key = "secret_key_testing"
 
+@app.before_request
+def before_request():
+    # print(request.endpoint)
+    if "username" in session:
+        if users.get_id(session["username"]) == -1:
+            session.pop("username", None)
+            return redirect(url_for("homepage"))
+
 @app.route("/")
 def main():
     return redirect(url_for("homepage"))

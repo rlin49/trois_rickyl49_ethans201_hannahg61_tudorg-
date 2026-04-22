@@ -9,7 +9,7 @@ def get_id(username):
     DBC.execute("SELECT id FROM users WHERE LOWER(username) LIKE LOWER(?);", (username, ))
     DBCF = DBC.fetchone()
     if DBCF is None:
-        return None
+        return -1
     DB.commit()
     DB.close()
     return DBCF[0]
