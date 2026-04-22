@@ -62,3 +62,12 @@ tudorG -- 2026-04-20 18:00
 
 tudorG, rickyL, hannahG, ethanS -- 2026-04-20 22:00
 - Recording final video
+
+tudorG, rickyL, hannahG, ethanS -- 2026-04-21 10:00
+- Design Doc Changes:
+- Removing old design ideas such as an accuracy graph.
+- Adding new design ideas such as favorites and user bios.
+- Changing API to say specifically RAWG
+- Updating sitemap diagram to reflect new site
+- Updating database charts to reflect new tables
+- Switching data visualization framework to ChartJS instead of D3 to reflect change in tool usage
