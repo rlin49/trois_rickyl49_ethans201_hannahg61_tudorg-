@@ -34,7 +34,7 @@ Users are given game information and have to guess total sales, which updates a 
 
 ### Set up virtual environment:
 
-``` python -m venv {{venv_path}} ```
+``` python3 -m venv {{venv_path}} ```
 
 
 ### Activate virtual environment:
@@ -69,9 +69,13 @@ Users are given game information and have to guess total sales, which updates a 
 
   ``` cd trois_rickyl49_ethans201_hannahg61_tudorg-/app ```
 
+### Run populate_db.py
+
+``` python3 populate_db.py  ```
+
 ### Run \_\_init\_\_.py
 
-  ``` python __init__.py ```
+  ``` python3 __init__.py ```
 
 ### FEATURE SPOTLIGHT
 * You can access other people's profile through the search page. 
